@@ -2,6 +2,7 @@
     <h1>login</h1>
 
     <form method = "POST" action = "{% url 'login'%}">
+       
         {% csrf_token %}
         Username:
         <br>
@@ -10,8 +11,13 @@
         Password:
         <br>
         <input name = "password" type = "password">
-        <br><br>
+        <br>
+        {% if error is not None %}
+        <span style = "color:red">{{error}}</span>
+        {% endif %}
+        <br>
         <input type = "submit" class = "btn btn-primary" value = "login">
+        
         
     </form>
     <a href = "../signup/">signup</a>
