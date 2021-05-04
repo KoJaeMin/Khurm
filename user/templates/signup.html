@@ -1,0 +1,27 @@
+<div class = "container">
+    <h1>sign up!</h1>
+
+    <form method = "POST" action = "{%url 'signup'%}">
+        {% csrf_token %}
+        Username:
+        <br>
+        <input name = "username" type = "text">
+        <br>
+        Password:
+        <input name = "password1" type = "password">
+        <br>
+        Comfirm Password:
+        <br>
+        <input name = "password2" type = "password">
+        <br>
+
+        {% if error. %}
+            <span style = "color:red">{{error}}</span>
+        {% endif %}
+        
+        
+        <br>
+        <input type = "submit" class = "btn btn-primary" value = "sign up">
+    </form>
+    <a href = "../login/">login</a>
+</div>
