@@ -1,0 +1,35 @@
+.flexslider,
+.fullwidth.flexslider{overflow:hidden}
+.flex-caption.transparent.light-font span,.homeslider.fullwidth.flexslider{text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.flex-caption.center,.flex-control-nav{text-align:center}
+.flex-container a:active,.flex-container a:focus,.flexslider a:active,.flexslider a:focus{outline:0}
+.flex-control-nav,.flex-direction-nav,.slides{margin:0;padding:0;list-style:none}
+.flexslider{margin:0;padding:0;width:100%;position:relative;zoom:1}
+.flexslider .slides>li{display:none}
+.flexslider .slides>li:first-child,.no-js .slides>li:first-child,.slides:after,html[xmlns] .slides{display:block}
+.flexslider .slides img{width:100%;display:block;height:auto;opacity:1;}
+.flex-pauseplay span{text-transform:capitalize}
+.slides:after{content:".";clear:both;visibility:hidden;line-height:0;height:0}
+.flex-pauseplay a.flex-play:before,.flex-pauseplay a:before{content:""}
+* html .slides{height:1%}
+.flex-viewport{max-height:2000px}
+.loading .flex-viewport{max-height:300px}
+.flexslider .slides{zoom:1;list-style:none}
+.flex-direction-nav{height:0}
+.flex-direction-nav a{width:45px;height:45px;position:absolute;top:65%;text-indent:-999em;border-radius:2px;z-index:10}
+.flex-direction-nav li .flex-prev{left:0px;background:url(../img/flex-arrow-prev.png) no-repeat;}
+.flex-direction-nav li .flex-next{right:-20px;background:url(../img/flex-arrow-next.png) no-repeat;}
+.flex-direction-nav .flex-disabled{opacity:.3;filter:alpha(opacity=30);cursor:default}
+.flexslider li{list-style:none!important}
+.flexslider ol,.flexslider ul{-webkit-margin-before:0;-webkit-margin-after:0;-webkit-margin-start:0;-webkit-margin-end:0;padding-left:0}
+.flexsliderpattern{background-repeat:repeat;opacity:.5;position:absolute}
+
+.fullwidth.flexslider .flex-direction-nav .flex-disabled{opacity:.3;filter:alpha(opacity=30);cursor:default}
+.homeslider.fullwidth.flexslider{height:465px;color:#fff;font-size:21px;font-weight:300}
+.homeslider h1{margin-bottom:20px;line-height:45px}
+.flexslider.blog{margin-bottom:35px}
+.flex-control-nav{width:100%;position:absolute;bottom:40px;z-index:9999}
+.shtextslider .flex-control-nav{left:0}
+.flex-control-nav li{margin:0 0 0 5px;display:inline-block;zoom:1}
+.flex-control-nav li:first-child{margin:0}
+.flex-control-nav li a{width:15px;height:15px;display:block;cursor:pointer;text-indent:-999em;background:#fff;border:2px solid #fff;border-radius:20px;box-shadow:0 1px 3px rgba(0,0,0,.1);opacity:.5;filter:alpha(opacity=50)}.flex-control-nav li a:hover{background:#fff;border:2px solid #fff;opacity:1;filter:alpha(opacity=100)}.flex-control-nav li a.flex-active{background:0 0;border:2px solid #fff;cursor:default;opacity:1;filter:alpha(opacity=100)}.flex-pauseplay a{display:block;width:20px;height:20px;position:absolute;bottom:5px;left:10px;opacity:.8;z-index:10;overflow:hidden;cursor:pointer}.flex-pauseplay a:before{display:inline-block}.flex-pauseplay a:hover{opacity:1}.flex-caption{zoom:1;width:100%;position:absolute;animation:.8s cubic-bezier(.165,.84,.44,1)0s normal none 1 avia-btt;opacity:1}.flex-caption div{margin:0 auto}.flex-caption.transparent.dark-font span{color:#333}.flex-caption.transparent.dark-font h2 span,.flex-caption.transparent.light-font h2 span{line-height:27px!important;padding:0}.flex-caption.light{color:#333;margin-left:10px}.flex-caption.light span{background:rgba(222,222,222,.5);box-shadow:10px 0 0 rgba(222,222,222,.5),-10px 0 0 rgba(222,222,222,.5)}.flex-caption.dark{color:#fff;margin-left:10px}.flex-caption.dark span{background:rgba(0,0,0,.3);box-shadow:10px 0 0 rgba(0,0,0,.3),-10px 0 0 rgba(0,0,0,.3)}.flex-caption h2 span{line-height:56px!important;padding:5px 0}.flex-caption.dark .button,.flex-caption.light .button{margin-left:-10px}.flex-caption .uppercase{font-size:25px;font-weight:600;text-transform:uppercase;margin:0;letter-spacing:1px}.flex-caption .lowercase{font-weight:300;font-size:18px;line-height:27px;margin:25px 0}.flexslider.blog .flex-caption{width:100%;position:absolute;bottom:0;background:rgba(0,0,0,.5);top:63%;padding-top:15px;color:#ccc;font-size:14px;line-height:24px}.flexslider.blog .flex-caption a{color:#fff}.flexslider.blog .flex-caption div{width:75%}.customtypewowslider .flex-caption{text-align:center;padding-top:8.2rem}.customtypewowslider h3.slidertitle{max-width:960px;margin:0 auto 10px;font-weight:800;font-size:60px;text-transform:uppercase;line-height:1.2}.customtypewowslider h4.sliderdescription{max-width:960px;margin:0 auto;font-size:18px;letter-spacing:2px;text-transform:uppercase;font-weight:300}
