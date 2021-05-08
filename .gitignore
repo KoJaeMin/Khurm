@@ -1,2 +1,5 @@
 joovenv
 myvenv
+env
+__pycache__
+*.pyc

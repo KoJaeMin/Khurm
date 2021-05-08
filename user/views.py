@@ -6,7 +6,7 @@ from django.contrib import auth
 
 def signup(request):
     if request.method == "GET": 
-        return render(request, 'signup.html')
+        return render(request, 'login2.html')
 
     elif request.method == "POST":
         username = request.POST.get['username', None]
