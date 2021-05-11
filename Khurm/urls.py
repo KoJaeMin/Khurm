@@ -26,9 +26,10 @@ urlpatterns = [
 #    path('user/', include('user.urls')),
 #    path('folder/', include('folder.urls')),
     path('admin/', admin.site.urls),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/signup', include('rest_auth.registration.urls')),
+#    path('', include('rest_auth.urls')),
+#    path('signup', include('rest_auth.registration.urls')),
     path('api-token-auth/', obtain_jwt_token),
     path('', include('user.urls')),
 
 ]
+
