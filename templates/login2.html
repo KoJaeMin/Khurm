@@ -36,9 +36,9 @@
 						<div class="contactstyle t opform">
 							<form method="post">
 								<div class="form">
-									<input type="text" name="email" placeholder="E-mail *">
-									<input type="password" name="password" placeholder="Password *">
-									<input type="submit" id="submit" class="clearfix btn" value="로그인">
+									<input type="text" id="loginemail" placeholder="E-mail *">
+									<input type="password" id="loginpassword" placeholder="Password *">
+									<input type="button" id="login" class="clearfix btn" value="로그인">
 								</div>
 							</form>
 						</div>
@@ -49,11 +49,11 @@
 						<div class="contactstyle topform">
 							<form method="post">
 								<div class="form">
-									<input type="text" name="email" placeholder="E-mail *">
-									<input type="text" name="nickname" placeholder="nickname *">
-									<input type="password" name="password" placeholder="Password *">
-									<input type="password" name="password" placeholder="Re-enter password  *">
-									<input type="submit" id="submit" class="clearfix btn" value="회원가입">
+									<input type="text" id="regemail" placeholder="E-mail *">
+									<input type="text" id="regnickname" placeholder="nickname *">
+									<input type="password" id="regpassword1" placeholder="Password *">
+									<input type="password" id="regpassword2" placeholder="Re-enter password  *">
+									<input type="button" id="register" class="clearfix" value="회원가입">
 								</div>
 							</form>
 						</div>
@@ -74,22 +74,84 @@
 <script>
 	var tabMenu = $("#tabMenu123 ul>li>a");
 	var tabSubMenu = $("#tabSubMenu .panel");
-	// 모든 서브메뉴 안보이게
 	tabSubMenu.hide();
 	
-	// 탭메뉴 a 를 클릭했을때
 	tabMenu.on("click", function(e){
-		// 클릭한 메뉴가 몇번째 메뉴인지 가져옴
 		var idx = tabMenu.index($(this));
-		// 모든 서브메뉴 안보이게
 		tabSubMenu.hide();
-		// 서브메뉴중에서 클릭한 메뉴에 해당하는 서브메뉴만 보이게
 		tabSubMenu.eq(idx).show();
 		
 		$("#tabMenu123 ul>li").removeClass();
 		$("#tabMenu123 ul>li").eq(idx).addClass("on");
 	});
 	tabMenu.eq(0).click();
+</script>
+<script>
+
+	//login script
+	function isEmail(email) {
+		var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		return regex.test(email);
+	}
+	var loginButton = $("#login");
+
+	loginButton.on("click",function(e) {
+		var email = document.getElementById("loginemail");
+		var password = document.getElementById("loginpassword");
+		if(email.value=='' || password.value=='') {
+			alert("필수 항목을 입력해주세요");
+			if(email.value=='') {
+				email.focus();
+			}
+			else {
+				password.focus();
+			}
+			return false;
+		}
+		if(isEmail(email.value)==false) {
+			alert("E-mail형식으로 입력해주세요.");
+			email.focus();
+			return false;
+		}
+		alert("로그인 완성");
+		return true;
+	});
+
+	//register script
+
+	var registerButton = $("#register");
+	registerButton.on("click",function(e) {
+		var email = document.getElementById("regemail");
+		var nickname = document.getElementById("regnickname");
+		var password1 = document.getElementById("regpassword1");
+		var password2 = document.getElementById("regpassword2");
+		if(isEmail(email.value)==false) {
+			alert("E-mail형식으로 입력해주세요.");
+			email.focus();
+			return false;
+		}
+		if(email.value == '' || nickname.value == '' || password1.value == '' || password2.value == '') {
+			alert("필수 항목을 입력해주세요.");
+			if(email.value=='') {
+				email.focus();
+			}
+			else if(nickname.value=='') {
+				nickname.focus();
+			}
+			else if(password1.value=='') {
+				password1.focus();
+			}
+			else {
+				password2.focus();
+			}
+			return false;
+		}
+		if(password1.value != password2.value) {
+			alert("패스워드가 다릅니다.");
+			password2.focus();
+			return false;
+		}
+	});
 </script>
 </body>
 </html>
