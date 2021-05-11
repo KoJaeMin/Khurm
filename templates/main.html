@@ -6,9 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel='stylesheet' href='{% static "css/bootstrap.min.css"%}' type='text/css' media='all'/>
-	<link rel='stylesheet' href='{% static "css/animate.min.css"%}' type='text/css' media='all'/>
 	<link rel='stylesheet' href='{% static "css/login_style.css"%}' type='text/css' media='all'/>
-	<link rel='stylesheet' href='{% static "css/flexslider.css"%}' type='text/css' media='all'/>
 </head>
 <body class="frontpage">
 
@@ -72,6 +70,7 @@
 <script src='{% static "js/jquery.min.js"%}'></script>
 <script src='{% static "js/jquery.scrolly.min.js"%}'></script>
 <script src='{% static "js/plugins.js"%}'></script>
+<script src='{% static "js/mainjs.js"%}'></script>
 <script>
 	var tabMenu = $("#tabMenu123 ul>li>a");
 	var tabSubMenu = $("#tabSubMenu .panel");
@@ -86,9 +85,6 @@
 		$("#tabMenu123 ul>li").eq(idx).addClass("on");
 	});
 	tabMenu.eq(0).click();
-</script>
-<script src='{% static "js/mainjs.js"%}'></script>
-<script>
 	$("#login").keypress(function (e) {
 		if(e.keyCode===13) {
 			$("#loginbutton").trigger("click");
