@@ -8,7 +8,7 @@ urlpatterns = [
     path('signup', include('rest_auth.registration.urls')),
     path('login', UserLoginView.as_view()),
     path('logout', rest_auth.views.LogoutView.as_view()),
-    path('detail', rest_auth.views.UserDetailsView.as_view())
-
+    path('detail', rest_auth.views.UserDetailsView.as_view()),
+    path('test',views.testlogin, name='login')
 ]
 

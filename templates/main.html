@@ -1,2 +1,99 @@
-Khurm
-<a href = "../user/login">로그아웃</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko-KR" class="no-js">
+<head>
+	<title>khurm</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel='stylesheet' href='{% static "css/bootstrap.min.css"%}' type='text/css' media='all'/>
+	<link rel='stylesheet' href='{% static "css/animate.min.css"%}' type='text/css' media='all'/>
+	<link rel='stylesheet' href='{% static "css/login_style.css"%}' type='text/css' media='all'/>
+	<link rel='stylesheet' href='{% static "css/flexslider.css"%}' type='text/css' media='all'/>
+</head>
+<body class="frontpage">
+
+<section id="home">
+	<div class="container">
+		<div class="textwidget">
+			<div id="logo" style="text-align: center;"><img src='{% static "img/logo.png"%}' style="max-width:100%;border:0;height: 200px;	margin-bottom: 50px;margin-top:50px;"></div>
+
+			<div class="left">
+				<img src='{% static "img/background.png"%}' style="width:100%;">
+			</div>
+
+			<div class="right">
+				<div id="tabMenu123" style="text-align: center;">
+					<ul class="com_tabmenu">
+						<li class="on"><a href="#none">로그인</a></li>
+						<li><a href="#none">계정만들기</a></li>
+					</ul>
+				</div>
+
+				<div id="tabSubMenu" style="text-align: center;" >
+					<div class="panel" id="panel1" style="display:block;">
+						<div id="naverIdLogin"><a href="#"><img src='{% static "img/naver.png"%}'></a></div>
+						<div class="contactstyle t opform">
+							<form method="post" id="login">
+								<div class="form">
+									{% csrf_token %}
+									<input type="text" name='email' id="loginemail" placeholder="E-mail *">
+									<input type="password" name='password' id="loginpassword" placeholder="Password *">
+									<input type="button" id="loginbutton" class="clearfix btn" value="로그인">
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="panel" id="panel2" style="display:block;">
+						<div id="naverIdRegister"><a href="#"><img src='{% static "img/naver.png"%}'></a></div>
+						<div class="contactstyle topform">
+							<form method="post" id="reg">
+								<div class="form">
+									{% csrf_token %}
+									<input type="text" name='email' id="regemail" placeholder="E-mail *">
+									<input type="text" name='username' id="regnickname" placeholder="nickname *">
+									<input type="password" name='password1' id="regpassword1" placeholder="Password *">
+									<input type="password" name='password2' id="regpassword2" placeholder="Re-enter password  *">
+									<input type="button" id="register" class="clearfix" value="회원가입">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- SCRIPTS
+================================================== -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
+<script src='{% static "js/jquery.js"%}'></script>
+<script src='{% static "js/jquery.min.js"%}'></script>
+<script src='{% static "js/jquery.scrolly.min.js"%}'></script>
+<script src='{% static "js/plugins.js"%}'></script>
+<script>
+	var tabMenu = $("#tabMenu123 ul>li>a");
+	var tabSubMenu = $("#tabSubMenu .panel");
+	tabSubMenu.hide();
+	
+	tabMenu.on("click", function(e){
+		var idx = tabMenu.index($(this));
+		tabSubMenu.hide();
+		tabSubMenu.eq(idx).show();
+		
+		$("#tabMenu123 ul>li").removeClass();
+		$("#tabMenu123 ul>li").eq(idx).addClass("on");
+	});
+	tabMenu.eq(0).click();
+</script>
+<script src='{% static "js/mainjs.js"%}'></script>
+<script>
+	$("#login").keypress(function (e) {
+		if(e.keyCode===13) {
+			$("#loginbutton").trigger("click");
+		}
+	});
+</script>
+</body>
+</html>
