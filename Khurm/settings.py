@@ -83,8 +83,9 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), 
     }
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
@@ -136,7 +137,7 @@ WSGI_APPLICATION = 'Khurm.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default' : {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'khurm',
         'USER': 'root',
@@ -196,3 +197,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_USE_JWT = True
+
+AUTH_USER_MODEL = 'user.User'

@@ -1,6 +1,7 @@
 joovenv
 myvenv
 env
+venv
 __pycache__
 *.pyc
 folder/__pycache__/__init__.cpython-38.pyc
