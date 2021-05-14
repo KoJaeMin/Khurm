@@ -4,8 +4,9 @@ from .models import File
 
 
 class FileSerializer(serializers.ModelSerializer):
-    auth_username = ReadOnlyField(source='author.username')
-    image = serializers.ImageField(use_url=True)
+    #auth_username = ReadOnlyField(source='author.username')
+    file = serializers.FileField(use_url = True)
+
     class Meta:
         model = File
         fields = '__all__'
