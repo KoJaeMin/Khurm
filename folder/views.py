@@ -18,14 +18,9 @@ class FileViewset(viewsets.ModelViewSet):
     serializer_class = FileSerializer
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
-
-    #@action(detail=True, renderer_classes=[StaticHTMLRenderer])
-    '''
+    
     def perform_create(self, serializer):
-        print(self.self.request.user)
         serializer.save(owner = self.request.user)
-        '''
-        #http_method_names = ['get', 'post', 'patch', 'delete']
         
         
 
