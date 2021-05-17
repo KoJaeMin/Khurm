@@ -1,6 +1,16 @@
 from django.shortcuts import render
+from rest_framework import viewsets, parsers
+from .models import File
+from .serializers import FileSerializer
 
-# Create your views here.
 
-def filelist(request):
-    return render(request,'main.html')
+class FileViewset(viewsets.ModelViewSet):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+
+    
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+        
+        

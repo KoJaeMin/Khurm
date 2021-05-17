@@ -73,6 +73,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
         ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+      	'rest_framework.renderers.StaticHTMLRenderer'
+    ],
+    
 }
 
 JWT_AUTH = { 
@@ -136,16 +142,19 @@ WSGI_APPLICATION = 'Khurm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'khurm',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': 'mysun1020',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
 
 
 # Password validation
@@ -184,6 +193,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
@@ -192,6 +202,9 @@ FILE_URL = '/res/'
 FILE_ROOT=os.path.join(BASE_DIR, 'Khurm/static/file')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -4,6 +4,7 @@ env
 venv
 __pycache__
 *.pyc
+media
 folder/__pycache__/__init__.cpython-38.pyc
 folder/__pycache__/admin.cpython-38.pyc
 folder/__pycache__/apps.cpython-38.pyc
