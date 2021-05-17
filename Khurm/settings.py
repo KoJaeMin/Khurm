@@ -148,8 +148,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'khurm',
-        'USER': 'root',
-        'PASSWORD': 'mysun1020',
+        'USER': 'root', #본인에 맞는 계정으로 변경필요
+        'PASSWORD': '1234', #본인에 맞는 계정으로 변경필요
         'HOST': 'localhost',
         'PORT': '3306',
     }
