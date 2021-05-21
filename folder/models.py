@@ -18,8 +18,8 @@ class File(models.Model):
     created = models.DateTimeField('파일 생성일', auto_now_add=True)
     updated = models.DateTimeField('파일 최근 수정일', auto_now=True)
     f_size = models.IntegerField('파일용량', default=0)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='file', db_column='f_owner')
-    f_tag = models.CharField('남녀명수', max_length=200, default=None)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='file', db_column='f_owner')#, default=User.username)
+    f_tag = models.CharField('남녀명수', max_length=200, default='None')
 
     file = models.FileField(upload_to=get_upload_path, default='media/test.txt')
 

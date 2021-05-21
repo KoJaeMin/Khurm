@@ -2,6 +2,8 @@ joovenv
 myvenv
 env
 venv
+
+secrets.json
 __pycache__
 *.pyc
 media

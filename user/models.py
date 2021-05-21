@@ -7,10 +7,10 @@ from .managers import CustomUserManager
 
 
 class User(AbstractUser):
-    username = None
-    email = models.EmailField(_('이메일 아이디'), unique=True)
+    username=models.CharField('사용자', max_length=20, unique=True, blank=False, default='')
+    email = models.EmailField(_('이메일'), unique=True)
     password = models.CharField('비밀번호', max_length=128)
-    nickname = models.CharField('별명이름', blank=True, max_length=100)
+    #nickname = models.CharField('별명이름', blank=True, max_length=100)
     phone = models.CharField('휴대폰번호', blank=True, max_length=100)
     birth = models.DateField('생년월일', blank=True, null=True)
     avail_storage = models.IntegerField('가용 용량', default=200)

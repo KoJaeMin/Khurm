@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import datetime
 import django_filters.rest_framework
-import os
+import os, json
+from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -22,7 +23,14 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#'
+
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
+
+with open('secrets.json', 'r') as f:
+    secrets=json.load(f)
+
+#SECRET_KEY = 'django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#'
+SECRET_KEY = secrets["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,7 +62,8 @@ INSTALLED_APPS = [
     
     'user',
     'folder',
-    'Khurm'
+    'Khurm',
+    'storages',
 ]
 
 # DRF auth settings
@@ -89,9 +98,8 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), 
     }
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
@@ -146,14 +154,26 @@ WSGI_APPLICATION = 'Khurm.wsgi.application'
 
 DATABASES = {
     'default': {
+        "ENGINE" : secrets["DATABASE"]['ENGINE'],
+        "NAME" : secrets['DATABASE']['NAME'],
+        'USER' : secrets['DATABASE']['USER'],
+        'PASSWORD' : secrets['DATABASE']['PASSWORD'],
+        'HOST' : secrets['DATABASE']['HOST'],
+        'PORT' : secrets['DATABASE']['PORT']
+        
+    }
+}
+
+"""      
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'khurm',
         'USER': 'root', #본인에 맞는 계정으로 변경필요
-        'PASSWORD': '1234', #본인에 맞는 계정으로 변경필요
+        'PASSWORD': '****', #본인에 맞는 계정으로 변경필요
         'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
+        'PORT': '3306'
+"""
+        
+
 
 
 
@@ -192,8 +212,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
@@ -205,6 +223,25 @@ FILE_ROOT=os.path.join(BASE_DIR, 'Khurm/static/file')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+#밑에 작동이 안됨..
+
+#AWS_ACCESS_KEY_ID = secrets["AWS_ACCESS_KEY_ID"],
+#AWS_SECRET_ACCESS_KEY = secrets["AWS_SECRET_ACCESS_KEY"],
+#AWS_REGION = "us-east-1",
+#AWS_STORAGE_BUCKET_NAME = secrets["AWS_STORAGE_BUCKET_NAME"],
+#AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_REGION),    
+
+#밑에 넣을 필요 있나 없나
+#AWS_S3_FILE_OVERWRITE = False
+#AWS_DEFAULT_ACL = None
+#AWS_S3_VERIFY = True
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+#DEFAULT_FILE_STORAGE = 'Khurm.storages.S3DefaultStorage'
+#STATICFILES_STORAGE = 'Khurm.storages.S3StaticStorage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -8,8 +8,6 @@ from django.shortcuts import render
 #class UserRegisterView(RegisterView):
 #    serializer_class = UserRegisterSerializer
 
-
-
 class UserLoginView(LoginView):
     serializer_class = UserLoginSerializer
 

@@ -1,5 +1,5 @@
 # serializers.py
-from rest_auth.registration.serializers import RegisterSerializer
+#from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import LoginSerializer
 """
 class UserLoginSerializer(LoginSerializer):
@@ -18,3 +18,6 @@ class UserLoginSerializer(LoginSerializer):
 """
 class UserLoginSerializer(LoginSerializer):
     username = None
+
+#class UserRegisterSerializer(RegisterSerializer):
+#    username =None
