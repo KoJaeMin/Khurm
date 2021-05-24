@@ -5,7 +5,7 @@ from .models import File
 
 class FileSerializer(serializers.ModelSerializer):
     auth_username = ReadOnlyField(source='author.username')
-    file = serializers.FileField(use_url = True)
+    file = serializers.FileField(use_url=True)
 
     class Meta:
         model = File

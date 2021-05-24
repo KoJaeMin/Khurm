@@ -1,6 +1,10 @@
 # serializers.py
-#from rest_auth.registration.serializers import RegisterSerializer
+# from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import LoginSerializer
+from rest_auth.serializers import PasswordChangeSerializer
+from rest_framework import serializers
+from user.models import User
+
 """
 class UserLoginSerializer(LoginSerializer):
     def get_fields(self):
@@ -9,15 +13,44 @@ class UserLoginSerializer(LoginSerializer):
         #username = None
         del fields['username']
         return fields
-
     #def validate(self, attrs):
         #attrs['username'] = attrs['email']
         #del attrs['email']
         #return super(LoginSerializer, self).validate(attrs)
-
 """
+
+
 class UserLoginSerializer(LoginSerializer):
     username = None
 
-#class UserRegisterSerializer(RegisterSerializer):
+
+# 프로필 수정
+class UserUpdateSerializer(PasswordChangeSerializer):  # 패스워드 변경 시리얼라이저 상속하여 비밀번호 변경과 암호자동화
+    username = serializers.CharField(max_length=20)
+    old_password = serializers.CharField(max_length=128)
+    new_password1 = serializers.CharField(max_length=128)
+    new_password2 = serializers.CharField(max_length=128)
+    phone = serializers.CharField(max_length=100)
+    birth = serializers.DateField()  # yyyy-mm-dd
+
+    def validate(self, attrs):
+        self.set_password_form = self.set_password_form_class(
+            user=self.user, data=attrs
+        )
+
+        if not self.set_password_form.is_valid():
+            raise serializers.ValidationError(self.set_password_form.errors)
+        try:
+            temp_user = User.objects.get(username=attrs['username'])
+        except Exception as e:
+            temp_user = None
+        if temp_user != None:  # 이미 리퀘스트의 유저네임이 있다는 것(중복)
+            raise serializers.ValidationError('Username check error')
+        else:  # 유저네임 중복 없으니까 데이터 변경
+            self.user.birth = attrs['birth']
+            self.user.username = attrs['username']
+            self.user.phone = attrs['phone']
+        return attrs
+
+# class UserRegisterSerializer(RegisterSerializer):
 #    username =None

@@ -15,6 +15,7 @@ import datetime
 import django_filters.rest_framework
 import os, json
 from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -27,16 +28,15 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
 
 with open('secrets.json', 'r') as f:
-    secrets=json.load(f)
+    secrets = json.load(f)
 
-#SECRET_KEY = 'django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#'
+# SECRET_KEY = 'django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#'
 SECRET_KEY = secrets["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -49,17 +49,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # registration
     'django.contrib.sites',
-    
+
     # DRF
     'rest_framework',
     'rest_framework.authtoken',
-    
+
     # rest_auth + allauth
     'rest_auth',
     'allauth',
     'allauth.account',
     'rest_auth.registration',
-    
+
     'user',
     'folder',
     'Khurm',
@@ -72,38 +72,37 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'DEFAULT_PARSER_CLASSES' : [
+    'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.MultiPartParser',
         'rest_framework.parsers.JSONParser',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES' : [
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
-        ],
+    ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-      	'rest_framework.renderers.StaticHTMLRenderer'
+        'rest_framework.renderers.StaticHTMLRenderer',
     ],
-    
+
 }
 
-JWT_AUTH = { 
-    'JWT_SECRET_KEY': SECRET_KEY, 
-    'JWT_ALGORITHM': 'HS256', 
-    'JWT_ALLOW_REFRESH': True, 
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), 
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), 
-    }
+JWT_AUTH = {
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+}
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
-
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -112,7 +111,6 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
 
 SITE_ID = 1
 
@@ -146,21 +144,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Khurm.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-
 DATABASES = {
     'default': {
-        "ENGINE" : secrets["DATABASE"]['ENGINE'],
-        "NAME" : secrets['DATABASE']['NAME'],
-        'USER' : secrets['DATABASE']['USER'],
-        'PASSWORD' : secrets['DATABASE']['PASSWORD'],
-        'HOST' : secrets['DATABASE']['HOST'],
-        'PORT' : secrets['DATABASE']['PORT']
-        
+        "ENGINE": secrets["DATABASE"]['ENGINE'],
+        "NAME": secrets['DATABASE']['NAME'],
+        'USER': secrets['DATABASE']['USER'],
+        'PASSWORD': secrets['DATABASE']['PASSWORD'],
+        'HOST': secrets['DATABASE']['HOST'],
+        'PORT': secrets['DATABASE']['PORT']
+
     }
 }
 
@@ -172,10 +168,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306'
 """
-        
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -195,7 +187,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -209,7 +200,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
@@ -217,34 +207,32 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 FILE_URL = '/res/'
-FILE_ROOT=os.path.join(BASE_DIR, 'Khurm/static/file')
+FILE_ROOT = os.path.join(BASE_DIR, 'Khurm/static/file')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# 밑에 작동이 안됨..
 
-#밑에 작동이 안됨..
+# AWS_ACCESS_KEY_ID = secrets["AWS_ACCESS_KEY_ID"],
+# AWS_SECRET_ACCESS_KEY = secrets["AWS_SECRET_ACCESS_KEY"],
+# AWS_REGION = "us-east-1",
+# AWS_STORAGE_BUCKET_NAME = secrets["AWS_STORAGE_BUCKET_NAME"],
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_REGION),
 
-#AWS_ACCESS_KEY_ID = secrets["AWS_ACCESS_KEY_ID"],
-#AWS_SECRET_ACCESS_KEY = secrets["AWS_SECRET_ACCESS_KEY"],
-#AWS_REGION = "us-east-1",
-#AWS_STORAGE_BUCKET_NAME = secrets["AWS_STORAGE_BUCKET_NAME"],
-#AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_REGION),    
+# 밑에 넣을 필요 있나 없나
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# AWS_S3_VERIFY = True
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-#밑에 넣을 필요 있나 없나
-#AWS_S3_FILE_OVERWRITE = False
-#AWS_DEFAULT_ACL = None
-#AWS_S3_VERIFY = True
-#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-#DEFAULT_FILE_STORAGE = 'Khurm.storages.S3DefaultStorage'
-#STATICFILES_STORAGE = 'Khurm.storages.S3StaticStorage'
+# DEFAULT_FILE_STORAGE = 'Khurm.storages.S3DefaultStorage'
+# STATICFILES_STORAGE = 'Khurm.storages.S3StaticStorage'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 REST_USE_JWT = True
 
