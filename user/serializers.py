@@ -1,7 +1,7 @@
 # serializers.py
 # from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import LoginSerializer
-from rest_auth.serializers import PasswordChangeSerializer
+from rest_auth.serializers import PasswordChangeSerializer, UserDetailsSerializer
 from rest_framework import serializers
 from user.models import User
 
@@ -51,6 +51,16 @@ class UserUpdateSerializer(PasswordChangeSerializer):  # 패스워드 변경 시
             self.user.username = attrs['username']
             self.user.phone = attrs['phone']
         return attrs
+
+
+class UserInfoSerializer(UserDetailsSerializer):
+
+    class Meta:
+        model = User
+        fields = ('pk', 'username', 'email', 'birth', 'phone', 'avail_storage', 'used_storage', 'kakao', 'naver',
+                  'last_login', 'date_joined')
+        read_only_fields = ('email', )
+
 
 # class UserRegisterSerializer(RegisterSerializer):
 #    username =None
