@@ -19,7 +19,7 @@ class File(models.Model):
     updated = models.DateTimeField('파일 최근 수정일', auto_now=True)
     f_size = models.IntegerField('파일용량', default=0)
     # owner = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='user', db_column='f_owner')#, default=User.username)
-    owner = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='user', null=True)
+    owner = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='file', null=True)
 
     f_tag = models.CharField('남녀명수', max_length=200, default='None')
 
@@ -35,7 +35,12 @@ class Shared(models.Model):
     file_no = models.ForeignKey(File, on_delete=models.CASCADE, related_name='shared')
     auth = models.CharField('권한(R/W)', max_length=100, default='R', null=False)
 
+    class Meta:
+        unique_together = ('user_no', 'file_no') # 유저와 파일 번호 묶어서 유니크로 변경
 
 class Favorite(models.Model):
     user_no = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite')
     file_no = models.ForeignKey(File, on_delete=models.CASCADE, related_name='favorite')
+
+    class Meta:
+        unique_together = ('user_no', 'file_no')

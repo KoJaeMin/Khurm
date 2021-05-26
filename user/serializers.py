@@ -52,7 +52,7 @@ class UserUpdateSerializer(PasswordChangeSerializer):  # 패스워드 변경 시
             self.user.phone = attrs['phone']
         return attrs
 
-
+# 프로필 조회
 class UserInfoSerializer(UserDetailsSerializer):
 
     class Meta:
