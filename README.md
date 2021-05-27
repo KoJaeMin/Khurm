@@ -10,14 +10,14 @@
   #### 3️⃣ S3 버킷 생성
    ###### - aws에서 S3버킷을 생성합니다. 다른 옵션은 모두 default 값으로 해도 되지만,
    ###### - 아래 이미지의 퍼블릭 액세스는 모두 체크 해제해주셔야 제대로 작동합니다.
-![image](https://user-images.githubusercontent.com/39080868/119846239-ec6a4180-bf44-11eb-936e-7cbde2bc6d0b.png)
+![image](https://user-images.githubusercontent.com/39080868/119846239-ec6a4180-bf44-11eb-936e-7cbde2bc6d0b.png){: width="10" height="10"}
 
   #### 4️⃣ IAM 액세스 키 설정
    ###### - 다음처럼 IAM콘솔에서 사용자를 추가합니다. 특히 프로그래밍방식 액세스를 체크해주세요
-![image](https://user-images.githubusercontent.com/39080868/119849468-9ea30880-bf47-11eb-897e-21d7125f9aaa.png)
+![image](https://user-images.githubusercontent.com/39080868/119849468-9ea30880-bf47-11eb-897e-21d7125f9aaa.png){: width="10" height="10"}
  <br>
    ###### - 다음으로 기존정책 연결에서 AmazonS3FullAccess를 체크해줍니다.
-![image](https://user-images.githubusercontent.com/39080868/119849790-e32ea400-bf47-11eb-8ddd-3242e464256f.png)
+![image](https://user-images.githubusercontent.com/39080868/119849790-e32ea400-bf47-11eb-8ddd-3242e464256f.png){: width="10" height="10"}
 
    ###### - 그럼 .csv로 된 credential 파일을 얻을 수 있습니다. 소중하게 보관해주세요!
 
