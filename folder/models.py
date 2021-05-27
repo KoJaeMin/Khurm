@@ -30,6 +30,23 @@ class File(models.Model):
         verbose_name_plural = 'Files'
 
 
+def get_gender_count(file_dir):
+    headers = {'X-NCP-APIGW-API-KEY-ID': 'pd89qvpcjt',
+               'X-NCP-APIGW-API-KEY': 'XVMxNAF7y9XBKsfLYLRlFKliMu6XR998YxmxA7DU'}
+
+    res = requests.post(url='https://naveropenapi.apigw.ntruss.com/vision/v1/face', files={"image": open(file_dir, "rb")}, headers=headers)
+    
+    male = 0
+    female = 0
+    jres = json.loads(res.text)
+    for i in jres['faces']:
+        if i['gender']['value'] == "male":
+            male += 1
+        else:
+            female+= 1
+    
+    return str(male)+"/"+str(female)
+
 class Shared(models.Model):
     user_no = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared')
     file_no = models.ForeignKey(File, on_delete=models.CASCADE, related_name='shared')
