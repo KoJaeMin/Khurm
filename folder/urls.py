@@ -6,6 +6,7 @@ from .views import FileViewset, SharedViewset
 
 router = SimpleRouter()
 router.register('accounts', FileViewset)
-router.register('shared', SharedViewset)# url패턴에 추가하는 방식과 다르게 마지막에 / 입력하면 오류
+router.register('shared', SharedViewset)
+# router는 url패턴에 추가하는 방식과 다르게 마지막에 / 입력하면 오류
 
 urlpatterns = router.urls
