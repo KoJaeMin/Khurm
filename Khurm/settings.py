@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'folder',
     'Khurm',
     'storages',
+    'djangoS3Browser'
 ]
 
 # DRF auth settings
@@ -139,7 +140,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
+            ],            
+            'libraries': {
+                's3-load': 'djangoS3Browser.templatetags.s3-tags',
+            },
         },
     },
 ]
@@ -218,17 +222,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 밑에 작동이 안됨..
 
-# AWS_ACCESS_KEY_ID = secrets["AWS_ACCESS_KEY_ID"],
-# AWS_SECRET_ACCESS_KEY = secrets["AWS_SECRET_ACCESS_KEY"],
-# AWS_REGION = "us-east-1",
-# AWS_STORAGE_BUCKET_NAME = secrets["AWS_STORAGE_BUCKET_NAME"],
-# AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_REGION),
 
-# 밑에 넣을 필요 있나 없나
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# AWS_S3_VERIFY = True
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+_ACCESS_KEY_ID = secrets["AWS_ACCESS_KEY_ID"] 
+AWS_SECRET_ACCESS_KEY = secrets["AWS_SECRET_ACCESS_KEY"] 
+AWS_STORAGE_BUCKET_NAME = secrets["AWS_STORAGE_BUCKET_NAME"] 
+AWS_AUTO_CREATE_BUCKET = True
+AWS_QUERYSTRING_AUTH = False
+AWS_EXPIRY = 60 * 60 * 24 * 7
+control = 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)
+AWS_HEADERS = {
+    'Cache-Control': bytes(control, encoding='latin-1')
+}
+S3_BROWSER_SETTINGS = "djangoS3Browser"
+
 
 # DEFAULT_FILE_STORAGE = 'Khurm.storages.S3DefaultStorage'
 # STATICFILES_STORAGE = 'Khurm.storages.S3StaticStorage'
