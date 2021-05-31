@@ -58,7 +58,11 @@ INSTALLED_APPS = [
     'rest_auth',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.naver',
+    'allauth.socialaccount.providers.kakao',
     'rest_auth.registration',
+    
     
     'user',
     'folder',
@@ -104,6 +108,8 @@ ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 
+LOGIN_REDIRECT_URL='/folder/accounts/'
+KAKAO_KEY = secrets["KAKAO_KEY"]
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`

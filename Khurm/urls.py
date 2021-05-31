@@ -31,6 +31,7 @@ urlpatterns = [
 #    path('signup', include('rest_auth.registration.urls')),
     path('api-token-auth/', obtain_jwt_token),
     path('user/', include('user.urls')),
+    path('user/', include('allauth.urls')),
 
 ]
 
