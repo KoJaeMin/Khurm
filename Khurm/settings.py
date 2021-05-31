@@ -62,14 +62,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.kakao',
     'rest_auth.registration',
-<<<<<<< HEAD
-    
-    
-=======
-    'allauth.socialaccount',
 
-
->>>>>>> ce3cb261f649a8117dfaba6686cdc1f55671539c
     'user',
     'folder',
     'Khurm',
