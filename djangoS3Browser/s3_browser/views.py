@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .operations import *
+from .forms import PostForm
 
 "fetch the directories within the selected folder"
 
@@ -14,10 +15,41 @@ def get_folder_items(request, main_folder, sort_a_z):
     return HttpResponse(json.dumps(json_string), content_type="application/json")
 
 
+
+
+'''
+        if uploaded[1] == 'png' or uploaded[1] == 'jpg':
+            serializer.save(owner = self.request.user, file_type = uploaded[1], f_tag = '네이버 api 결과값')
+        else:
+            serializer.save(owner = self.request.user, file_type = uploaded[1])'''
+
+
 @csrf_exempt
 def upload(request):
-    file = request.FILES.get('file')
-    upload_file(request.POST.get('loc', ''), file)
+    if request.method == "POST":
+        # file S3에 업로드 하는 부분
+        file = request.FILES.get('file')
+        upload_file(request.POST.get('loc', ''), file)
+
+        #file model에 올리기 전 유효성 검사 피하기 위해 null이어도 되는 파트 지정
+        form = PostForm(request.POST, request.FILES)
+        form.fields['file_type'].required = False
+        form.fields['f_tag'].required = False
+        form.fields['f_size'].required = False
+
+        #form 유효성 체크하고 model에 정보 넣음.
+        if form.is_valid():
+            post = form.save()
+            post.save()
+            file_type = str(file).split('.')
+            post.file_type = file_type[1]
+            post.f_size = file.size
+            if file_type[1] == 'png' or file_type[1] == 'jpg':
+                post.f_tag = "사진임"
+            else:
+                post.f_tag = "None"
+            post.save()
+            
     return HttpResponse(json.dumps(file.name), content_type="application/json", status=200)
 
 

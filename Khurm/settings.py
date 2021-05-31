@@ -27,7 +27,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
 
-with open('secrets.json', 'r') as f:
+with open('secrets.json', 'r', encoding='UTF-8') as f:
     secrets = json.load(f)
 
 # SECRET_KEY = 'django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#'
