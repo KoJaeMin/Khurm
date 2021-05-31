@@ -16,7 +16,6 @@ from django.contrib import messages
 import allauth
 import requests
 import urllib
-import .models import User
 
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout, get_user_model
