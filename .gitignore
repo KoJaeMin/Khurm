@@ -25,3 +25,4 @@ user/__pycache__/urls.cpython-38.pyc
 user/__pycache__/views.cpython-38.pyc
 user/migrations/__pycache__/__init__.cpython-38.pyc
 user/migrations/__pycache__/0001_initial.cpython-38.pyc
+.DS_Store

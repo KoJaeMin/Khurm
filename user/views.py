@@ -2,8 +2,13 @@ from rest_auth.registration.views import RegisterView
 from rest_auth.views import LoginView
 from django.views import View
 from django.http import JsonResponse, HttpResponse
+from rest_auth.views import PasswordChangeView
+from rest_auth.views import UserDetailsView
+from rest_framework.generics import DestroyAPIView
+
 from .serializers import UserLoginSerializer
-from django.contrib.auth.models import User
+from .serializers import UserUpdateSerializer, UserInfoSerializer
+from user.models import User
 from django.contrib import auth
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404, reverse
@@ -22,6 +27,18 @@ from django.contrib.messages.views import SuccessMessageMixin
 class UserLoginView(LoginView):
     serializer_class = UserLoginSerializer
     
+
+class UserUpdateView(PasswordChangeView):
+    serializer_class = UserUpdateSerializer
+
+class UserInfoView(UserDetailsView):
+    serializer_class = UserInfoSerializer
+
+class UserDeleteView(DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserInfoSerializer
+    def get_object(self):
+        return self.request.user
 
 def testlogin(request):
     return render(request, 'main.html')
