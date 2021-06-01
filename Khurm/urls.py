@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static  
 from django.contrib import admin
@@ -24,13 +25,18 @@ from rest_auth.views import (
     PasswordResetView, PasswordResetConfirmView
 )
 
+from Khurm import views
+
 urlpatterns = [
+    path('', views.index, name='index'),
     path('folder/', include('folder.urls')),
+    url(r'^' + settings.S3_BROWSER_SETTINGS + '/', include('djangoS3Browser.s3_browser.urls')),
     path('admin/', admin.site.urls),
 #    path('', include('rest_auth.urls')),
 #    path('signup', include('rest_auth.registration.urls')),
     path('api-token-auth/', obtain_jwt_token),
     path('user/', include('user.urls')),
+    path('user/', include('allauth.urls')),
 
 ]
 

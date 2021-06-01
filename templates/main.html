@@ -29,7 +29,9 @@
 
 				<div id="tabSubMenu" style="text-align: center;" >
 					<div class="panel" id="panel1" style="display:block;">
-						<div id="naverIdLogin"><a href="#"><img src='{% static "img/naver.png"%}'></a></div>
+						<div id="naverIdLogin">{% load socialaccount %}<a href="{% provider_login_url 'naver' %}"><img src='{% static "img/naver.png"%}'></a></div>
+						<!--<div id="kakao_login">{% load socialaccount %}<a href="{% provider_login_url 'kakao' %}">카카오로그인</a></div>-->
+						<div id="kakao_login"><a href="{% url 'user:kakao-login' %}">카카오로그인</a></div>
 						<div class="contactstyle t opform">
 							<form method="post" id="login">
 								<div class="form">
