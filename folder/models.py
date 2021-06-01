@@ -1,6 +1,8 @@
 from django.db import models
 from user.models import User
 import os
+import requests
+import json
 
 
 # Create your models here.
