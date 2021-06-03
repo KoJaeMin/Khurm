@@ -39,6 +39,7 @@ urlpatterns = [
     path('token/verify/', verify_jwt_token),
     path('user/', include('user.urls')),
     path('user/', include('allauth.urls')),
+    path('rest-auth/',include('rest_auth.urls')),
 
 ]
 

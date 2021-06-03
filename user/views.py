@@ -59,7 +59,7 @@ class UserDeleteView(DestroyAPIView):
     def get_object(self):
         return self.request.user
 
-def testlogin(request):
+def mainlogin(request):
     return render(request, 'main.html')
 
 @login_required
@@ -67,6 +67,14 @@ def GoHome(request):
     return render(request, 'home.html')
 
 
+def mainmodify(request):
+    token=request.session.get('token','eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Im5hbWVzYWNlQGtha2FvLmNvbSIsImV4cCI6MTYyMzI2MjkwMSwiZW1haWwiOiJuYW1lc2FjZUBrYWthby5jb20iLCJvcmlnX2lhdCI6MTYyMjY1ODEwMX0.PbsWsdJzdoUMNPInZb5Szf_VtLKPaI4U9UsfF4OICU0')
+    # print("token : " + jwt.decode(token,"django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#",algorithm="HS256"))
+    # token=request.COOKIES.get('token')
+    decode = jwt.decode(token,"django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#",algorithm="HS256")
+    # print("userid = " + decode["user_id"].__str__())
+    user = get_object_or_404(User,pk=decode["user_id"])
+    return render(request, 'modify.html',{'user':user})
 
 class KakaoLoginView(View):
     def get(self, request):
