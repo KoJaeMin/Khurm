@@ -55,10 +55,44 @@ loginButton.on("click",function(e) {
     }
     var form = $('#login')[0];
     var d = new FormData(form);
+    // $.ajax({
+    //     type:'POST',
+    //     enctype:'multipart/form-data',
+    //     url:'/api-token-auth/',
+    //     data:d,
+    //     processData:false,
+    //     contentType:false,
+    //     cache:false,
+    //     timeout:600000,
+    //     success:function(data2) {
+    //         alert("로그인 완료");
+    //         console.log(data2['token']);
+    //         $.ajax({
+    //             type:'POST',
+    //             enctype:'multipart/form-data',
+    //             url:'/login/',
+    //             data:d,
+    //             processData:false,
+    //             contentType:false,
+    //             cache:false,
+    //             timeout:600000,
+    //             success:function(data) {
+    //                 sessionStorage.setItem("token",data2['token']);
+    //                 top.location.href = '/modify/';
+    //             },
+    //             error: function(request,status,error) {
+    //                 alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    //             }
+    //         });
+    //     },
+    //     error: function(request,status,error) {
+    //         alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    //     }
+    // });
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',
-        url:'/login',
+        url:'/rest-auth/login/',
         data:d,
         processData:false,
         contentType:false,
@@ -67,10 +101,26 @@ loginButton.on("click",function(e) {
         success:function(data) {
             alert("로그인 완료");
             console.log(data);
+            top.location.href="/user/home";
+            // $.ajax({
+            //     type:'POST',
+            //     enctype:'multipart/form-data',
+            //     url:'/api-token-auth/',
+            //     data:d,
+            //     processData:false,
+            //     contentType:false,
+            //     cache:false,
+            //     timeout:600000,
+            //     success:function(data2) {
+            //         alert("JWT 발급 완료");
+            //         console.log(data2);
+            //         top.location.href = '/user/home';
+            //     }
+            // })
         },
-        error: function(e) {
-            console.log(e);
-            alert("존재하지 않는 이메일이거나 비밀번호가 틀렸습니다.");
+        error: function(request,status,error) {
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+
         }
     });
 });
@@ -114,7 +164,7 @@ registerButton.on("click",function(e) {
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',
-        url:'/signup',
+        url:'/user/signup/',
         data:d,
         processData:false,
         contentType:false,
@@ -123,11 +173,11 @@ registerButton.on("click",function(e) {
         success:function(data) {
             alert("회원가입 완료");
             console.log(data);
-            top.location.href = '/test';
+            top.location.href = '/user/main';
         },
-        error: function(e) {
-            console.log(e);
-            alert("error");
+        error: function(request,status,error) {
+            alert(request.responseText);
+
         }
     });
 });
