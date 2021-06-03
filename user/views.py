@@ -6,6 +6,8 @@ from rest_auth.views import PasswordChangeView
 from rest_auth.views import UserDetailsView
 from rest_framework.generics import DestroyAPIView
 
+from djangoS3Browser.s3_browser.operations import create_bucket#회원가입 시 버킷 생성
+
 from .serializers import UserLoginSerializer
 from .serializers import UserUpdateSerializer, UserInfoSerializer
 from user.models import User
@@ -45,6 +47,26 @@ class NaverLogin(SocialLoginView):
 
 class UserLoginView(LoginView):
     serializer_class = UserLoginSerializer
+
+    # def get_response(self):
+    #     orginal_response = super().get_response()
+    #     settings.AWS_STORAGE_BUCKET_NAME=self.user.email.split('@')[0]+'1234'        
+    #     return orginal_response
+    ###custom 해야함###
+    # user = User.objects.get(email = email)
+    # print("사용자 이미 존재해요")
+    # settings.AWS_STORAGE_BUCKET_NAME=email.split('@')[0]+'1234'
+
+
+
+class UserSignupView(RegisterView):
+    print("새로 추가해요")
+    ###custom 해야함###
+    # create_bucket(email.split('@')[0]+'1234')
+    # settings.AWS_STORAGE_BUCKET_NAME=email.split('@')[0]+"1234"
+    # print("실행할 bucket name : ",email.split('@')[0]+'1234')
+
+
     
 
 class UserUpdateView(PasswordChangeView):
@@ -113,6 +135,23 @@ class KakaoLoginCallbackView(View):
         kakao_id = user_data['id']
         username = user_data['properties']['nickname']
         email = user_data['kakao_account']['email']
+        
+        try:
+            # 사용자가 이미 존재할 때
+            if User.objects.filter(email = email).exists():
+                user = User.objects.get(email = email)
+                print("사용자 이미 존재해요")
+                settings.AWS_STORAGE_BUCKET_NAME=email.split('@')[0]+'0000'
+                return HttpResponseRedirect(success_url)
+            # 처음 로그인 하는 User 추가
+            else :
+                # User(email = email, username = kakao_id).save()
+                print("새로 추가해요")
+                create_bucket(email.split('@')[0]+'0000')
+                settings.AWS_STORAGE_BUCKET_NAME=email.split('@')[0]+"0000"
+            print("실행할 bucket name : ",email.split('@')[0]+'0000')
+        except KeyError:
+            return JsonResponse({"message": "INVALID_KEYS"}, status = 400)
         token_url='http://127.0.0.1:8000/user/rest-auth/kakao/'
         data = {"access_token" : access_token}
         accept = requests.post(token_url,json=data)
@@ -122,29 +161,10 @@ class KakaoLoginCallbackView(View):
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
-#        accept_json.pop('user', None)
-
         return HttpResponseRedirect(success_url)
-#        return JsonResponse(accept_json)
+#        return JsonResponse(accept_json)하면 token으로 응답합니다 { token : ~ }
 
-        # try:
-        #     # 사용자가 이미 존재할 때
-        #     if User.objects.filter(email = email).exists():
-        #         user = User.objects.get(email = email)
-        #         #token = jwt.encode({"email" : email}, settings.SECRET_KEY, algorithm = "HS256")
-        #         #print("token encode :", token)
-        #         #token = token.decode("utf-8")
-        #         #print("token decode :", token)
-        #         return HttpResponseRedirect(success_url)
-        #     # 처음 로그인 하는 User 추가
-        #     else :
-        #         User(
-        #             email    = email,
-        #             username = kakao_id
-        #         ).save()
-        # except KeyError:    
-        #     return JsonResponse({"message": "INVALID_KEYS"}, status = 400)
-
+        
 
 class NaverLoginView(View):
     def get(self, request):

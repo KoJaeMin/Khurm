@@ -21,6 +21,18 @@ Big Note: for [1:]
 
 "fetch the directories within the selected folder"
 
+# 버킷 생성
+def create_bucket(email):
+    bucket = s3client.create_bucket(
+        ACL='public-read-write',
+        Bucket=email,
+        CreateBucketConfiguration={
+            'LocationConstraint':'ap-northeast-2'
+        },
+    )
+
+
+
 
 def get_folder_with_items(main_folder, sort_a_z):
     try:
