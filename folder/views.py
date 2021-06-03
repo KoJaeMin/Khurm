@@ -23,6 +23,22 @@ class FileViewset(viewsets.ModelViewSet):
         query_set = queryset.filter(owner=self.request.user)
         return query_set
 
+
+class FileViewset_byface(viewsets.ModelViewSet):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        type = ''
+        no = 0
+        if 'male' in self.request.query_params.keys() and 'female' in self.request.query_params.keys():
+             #female과 male에 대한 쿼리파라미터가 있으면
+            genderinfo = self.request.query_params['male'] + '/' + self.request.query_params['female']
+
+        return queryset.filter(f_tag=genderinfo)
+
+
 class SharedViewset(viewsets.ModelViewSet):
     queryset = Shared.objects.all()
     serializer_class = SharedSerializer
