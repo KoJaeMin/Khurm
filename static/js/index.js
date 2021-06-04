@@ -1,21 +1,38 @@
 $(function(){
     $("#main_logo").on("click", function(){
-        location.href="http://naver.com";
+        location.href="#";
     })
     for(var i=0;i<left_menu.Mname.length;i++){
-        $("#menu").append(`<div class="button"><a href="${left_menu.Mlink[i]}"> ${left_menu.Mname[i]} </a></div>`);
+        $("#menu").append(`<div class="button" onclick = "clickonmenu('${left_menu.Mname[i]}')"> ${left_menu.Mname[i]} </div>`);
     }
+    $('body').on('click',(e)=>{
+        var $tgPoint = $(e.target);
+        var $popCallBtn = $tgPoint.hasClass('sub_button')
+        var $popArea = $tgPoint.hasClass('folder_set')
+        if ( !$popCallBtn && !$popArea ) {
+            $('ul.submenu > li').css('display','none');
+        }
+    })
+    $('.folder_set').on('click',()=>{
+        $(this).next('#folder').click();
+    })
+
+    
     
 })
+function clickonmenu(item){
+    $('.abstract').html(`<p>${item}</p>`);
+    $.ajax({
+        url:'/folder/', 
+        success:function(data)
+        { $('.main_contents').html(data) } 
+    });
+}
 
-/*var iptEls = document.querySelectorAll('input');
-[].forEach.call(inps, function(iptEl) {
-    iptEl.onchange = function(e) {
-        console.log(this.files);
-    };
-});
-*/
+var iptEls = document.querySelectorAll('input[id="folder_set"]');
+
 var left_menu = {
-    Mname:['홈','모든 파일','최근 항목','별표항목','공유됨','파일 요청','삭제된 파일'],
-    Mlink:['','','','','','',''],
+    Mname:['홈','사진 파일','즐겨찾기','공유된 파일','삭제된 파일'],
+    EMname:['home','imgfile','bookmark','shared','delete'],
+    //Mlink:['./file_home.html','./file_all.html','./file_bookmark.html','./file_shared.html','./file_delete.html'],//['/home','/file','/file/bookmark','/file/shared','/file/delete'],
 };

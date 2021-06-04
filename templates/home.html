@@ -1,23 +1,24 @@
 {% load static %}
+{% load s3-tags %}
 <!DOCTYPE html>
 <html lang="ko-KR" class="no-js">
 
 <head>
+    
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="{% static 'js/index.js'%}"></script>
     <link rel="stylesheet" href='{% static "css/index.css"%}' type='text/css'>
     <link rel="shortcut icon" href='{% static "img/Khurm_logo.ico"%}'>
-    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
-    <!--
+    <!--<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+    
     <link rel='stylesheet' href='{% static "css/bootstrap.min.css"%}' type='text/css' media='all'/>
 	<link rel='stylesheet' href='{% static "css/index.css"%}' type='text/css'>
     ./Khurm_logo.ico
 -->
     <title>Khurm</title>
 </head>
-
-<body style="margin: 0;">
+<body>
     <div id='main'>
         <div class='menu'>
             <div id='khurm_logo'>
@@ -30,31 +31,28 @@
             <div class="blank_space"></div>
             <div class="navigator_space">
                 <div id="search_box">
-                    <input type="text" placeholder="검색어를 입력하세요">
-                    <button type="submit"><i class="fas fa-search"></i></button>
+                    <form accept-charset="utf-8" method ="get">
+                        <input type="text" placeholder="검색어를 입력하세요">
+                        <button type="submit"><img src="{% static 'img/search-solid.svg'%}"></button>
+                    </form>
                 </div>
                 <div class="menu_icon">
-                    <button><i class="fas fa-question-circle"></i></button>
-                    <button><i class="fas fa-cog"></i></button>
+                    <button id="setting"><img src="{% static 'img/user-circle-solid.svg'%}"></button>
+                    <button id="logout">로그아웃</button>
                 </div>
             </div>
-            <div class="abstract">
-                <p>개요<button>숨기기</button></p>
+            <div id='file_content'>
+                <div class="abstract">
+                    <p>홈</p>
+                </div>
+                <div class='main_contents'>
+                    {% load_s3 %}
+                </div>
+                
             </div>
-            <div id="filesetbutton" style="margin-left: 25px;">
-                <div class="folder_set"><label for="folder_set"> <input id="folder_set" type="file" webkitdirectory mozdirectory><i class="fas fa-arrow-up"></i> upload </label></div>
-                <div class="folder_set"><i class="fas fa-arrow-down"></i> download </div>
-                <div class="folder_set"><i class="fas fa-ellipsis-h"></i></div>
-            </div>
-            <div style="margin-left: 25px; margin-top: 20px;">
-                <table id="file_table">
-                    <tr>
-                        <td>이름</td>
-                        <td>수정됨</td>
-                        <td>구성원</td>
-                    </tr>
-                </table>
-            </div>
+            <!--
+            
+            -->
         </div>
     </div>
 </body>
