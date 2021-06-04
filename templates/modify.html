@@ -1,0 +1,60 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko-KR" class="no-js">
+<head>
+	<title>회원정보 수정</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel='stylesheet' href='{% static "css/bootstrap.min.css"%}' type='text/css' media='all'/>
+	<link rel='stylesheet' href='{% static "css/modify_style.css"%}' type='text/css' media='all'/>
+</head>
+<body class="frontpage">
+{{user}}
+<section id="home">
+	<div class="container">
+		<div class="textwidget">
+			<div id="logo" style="text-align: center;"><img src='{% static "img/logo.png"%}' style="max-width:100%;border:0;height: 200px;	margin-bottom: 50px;margin-top:50px;"></div>
+
+
+			<div class="right">
+				<div id="tabMenu123" style="text-align: center;">
+					<ul class="com_tabmenu">
+						<li class="on"><a href="#none">회원정보변경</a></li>
+					</ul>
+				</div>
+
+				<div id="tabSubMenu" style="text-align: center;" >
+					<div class="panel" id="panel1" style="display:block;">
+						<div class="contactstyle t opform">
+							<form method="post" id="mod">
+								<div class="form">
+									{% csrf_token %}
+									<input type="text" name='username' id="modnickname" placeholder="nickname" value="{{user.username}}" >
+									<input type="password" name='password' id="modoldpassword" placeholder="Old Password">
+									<input type="password" name='password1' id="modpassword1" placeholder="New Password">
+									<input type="password" name='password2' id="modpassword2" placeholder="Re-enter new password">
+									<input type="text" name='phonenumber' id="phonenumber" onKeyup="inputPhoneNumber(this);" placeholder="Phone-number" value="{{ user.phone }}">
+									<input type="date" id="birthdate" value={{user.birth}}>
+									<input type="button" id="modify" class="clearfix" value="변경하기">
+									<input type="button" id="withdrawal" class="clearfix" style="background-color:red; color:white;" value="탈퇴하기">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- SCRIPTS
+================================================== -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
+<script src='{% static "js/jquery.js"%}'></script>
+<script src='{% static "js/jquery.min.js"%}'></script>
+<script src='{% static "js/jquery.scrolly.min.js"%}'></script>
+<script src='{% static "js/plugins.js"%}'></script>
+<script src='{% static "js/modifyjs.js"%}'></script>
+</body>
+</html>

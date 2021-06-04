@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, parsers, status
-from .models import File, Shared, User
-from .serializers import FileSerializer, SharedSerializer
+from .models import File, Shared, User, Favorite
+from .serializers import FileSerializer, SharedSerializer, FavoriteSerializer
 
 class FileViewset(viewsets.ModelViewSet):
     queryset = File.objects.all()
@@ -85,5 +85,28 @@ class SharedViewset(viewsets.ModelViewSet):
 
         return queryset
 
+class FavoriteViewset(viewsets.ModelViewSet):
+    queryset = Favorite.objects.all()
+    serializer_class = FileSerializer
 
+    def perform_create(self, serializer): # post(즐겨찾기 추가) 오버라이드
+        serializer.save(user_no=User.objects.get(id=self.request.data['user_no']),
+                        file_no=File.objects.get(f_no=self.request.data['file_no']))
 
+    def get_queryset(self):
+        queryset = self.queryset
+        type = ''
+        no = 0
+        if 'type' in self.request.query_params.keys(): #type 쿼리파라미터가 있으면
+            type = self.request.query_params['type']
+        if 'no' in self.request.query_params.keys(): #no 쿼리파라미터가 있으면
+            no = self.request.query_params['no']
+
+        if type=='user': # 유저기준으로 즐겨찾기되어있는 파일 필터링
+            return queryset.filter(user_no=User.objects.get(id=no))
+        elif type=='file':# 파일기준으로 즐겨찾기되어 있는 유저 필터링
+            return queryset.filter(file_no=File.objects.get(f_no=no))
+        elif type=='my': # 로그인한 유저에게 즐겨찾기기되어 는 레코드 필터링
+            return queryset.filter(user_no=self.request.user)
+
+        return queryset

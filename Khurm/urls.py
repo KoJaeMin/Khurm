@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static  
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 from rest_auth.views import (
     LoginView, LogoutView, PasswordChangeView,
@@ -34,9 +34,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 #    path('', include('rest_auth.urls')),
 #    path('signup', include('rest_auth.registration.urls')),
-    path('api-token-auth/', obtain_jwt_token),
+    path('token/obtain/', obtain_jwt_token),
+    path('token/refresh/', refresh_jwt_token),
+    path('token/verify/', verify_jwt_token),
     path('user/', include('user.urls')),
     path('user/', include('allauth.urls')),
+    path('rest-auth/',include('rest_auth.urls')),
 
 ]
 

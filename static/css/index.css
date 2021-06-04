@@ -1,19 +1,10 @@
-@media(max-width:768px){
-    .menu{
-        display: none;
-        position: absolute;
-    }
-    .contents{
-        margin-left: 50px;
-    }
-}
-@media(min-width:768px){
-    .contents {
-        background-color: rgb(255, 255, 255);
-        margin-left: 300px;
-        padding: 5px 10px;
-        height: 100%;
-    }
+
+
+.contents {
+    background-color: rgb(255, 255, 255);
+    margin-left: 300px;
+    padding: 5px 10px;
+    height: 100%;
 }
 body {
     margin: 0;
@@ -59,24 +50,22 @@ body {
     box-sizing:border-box;
     overflow:hidden;
     margin:0 0 0 0;
-  }
-.button a{
     font-family:arial;
     font-size:25px;
     color: #666;
     text-decoration:none;
+    text-decoration-line: none;
     line-height:60px;
     transition:all .5s ease;
     z-index:2;
     position:relative;
+
 }
 .button:hover{
     background-color: #808080;
-}
-
-.button:hover a{
     color:#42b983;
 }
+
 .blank_space{
     height: 40px;
 }
@@ -93,8 +82,8 @@ body {
     float:left;
 }
 #search_box button{
-    height: 55px;
-    width: 55px;
+    height: 50px;
+    width: 50px;
     background-color: #42b983;
     
 }
@@ -103,34 +92,38 @@ body {
     float: right;
     
 }
-.menu_icon button{
-    height: 50px;
-    width: 50px;
-    border: 0px;
+.menu_icon > #logout{
+    border: 1px solid #42b983; 
+    background-color: rgba(0,0,0,0);
+    color: #42b983; 
+    padding: 5px;
     font-size: 30px;
+    border-radius: 5px;
+}
+.menu_icon > #setting{
+    margin-bottom: 5px;
+    height: 55px;
+    width: 55px;
+    border: 0px;
     background-color: #fff;
 }
 .abstract{
-    margin-left: 25px;
     margin-bottom: 20px;
     font-size: 35px;
-    width: 70%;
     border-bottom: 1px solid #E2E2E2;
 }
-.abstract button{
-    width: 60px;
-    height: 50px;
-    background-color: #fff;
-    border: 0px;
-    text-align: center;
-    text-decoration: underline;
-    color: #42b983;
-    float: right;
+p{
+    display: inline-block;
+    margin: 0 0 10px;
+}
+.abstract > p{
+    padding-left: 25px;
 }
 #filesetbutton{
 }
-.folder_set{
-    width: 120px;
+
+/*#folder_set{
+    width: 800px;
     height: 50px;
     margin: 5px;
     border: 0px;
@@ -139,8 +132,10 @@ body {
     display: inline-flex;
     cursor:default;
     text-decoration: none;
+    text-align: center;
     
 }
+*/
 #file_table{
     height: 50px;
     width: 60%;
@@ -155,9 +150,26 @@ body {
 }
 label{
     width: 100%;
-    text-align: center;
+    text-align: left;
 }
-input[type="file"] {  /* 파일 필드 숨기기 */
+#folder_set{
+    display: none;
+}
+.folder_set{
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    display: inline-flex;
+    text-align: left;
+    background-color: #42b983;
+}
+
+input[id="folder_set"] {  /* 파일 필드 숨기기 */
+    display: none;
+    overflow: hidden;
+}
+
+.submenu > button{
     position: absolute;
     width: 1px;
     height: 1px;
@@ -166,5 +178,50 @@ input[type="file"] {  /* 파일 필드 숨기기 */
     overflow: hidden;
     clip:rect(0,0,0,0);
     border: 0;
+}
 
-  }
+ul, ol, li { 
+    list-style:none; 
+    margin:0; 
+    padding:0;
+}
+   
+ul.myMenu {
+    display: grid;
+    grid-template-columns: 160px 160px 160px;
+    height: 60px;
+    margin-bottom: 0px;
+}
+ul.myMenu > li { 
+    display:inline-block;
+    width:150px;
+    height: 100px;
+    padding:5px 10px; 
+    /*background:#42b983;*/ 
+    text-align:left; 
+}
+ul.myMenu > li ul.submenu > li { 
+    display:none;
+    width:150px; 
+    /*padding:5px 10px; 
+    background:#42b983; 
+    text-align:center;*/
+    /*display:none;*/ 
+    z-index: 100;
+    position: relative;
+}
+#more{
+    width: 80px;
+}
+li > .sub_button{
+    display: inline-block;
+    padding: .5em .75em;
+    font-size: inherit;
+    line-height: normal; 
+    vertical-align: middle;
+    border: 1px solid #ebebeb; 
+    border-bottom-color: #e2e2e2; 
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}

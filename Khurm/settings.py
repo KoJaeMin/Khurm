@@ -81,7 +81,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
@@ -108,8 +108,10 @@ ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 
-LOGIN_REDIRECT_URL='/folder/accounts/'
+LOGIN_REDIRECT_URL='/user/home/'
 KAKAO_KEY = secrets["KAKAO_KEY"]
+NAVER_ID = secrets["NAVER_ID"]
+NAVER_SECRET = secrets["NAVER_SECRET"]
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -129,7 +131,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    ]
 
 ROOT_URLCONF = 'Khurm.urls'
 
