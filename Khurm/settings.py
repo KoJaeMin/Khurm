@@ -67,7 +67,9 @@ INSTALLED_APPS = [
     'folder',
     'Khurm',
     'storages',
-    'djangoS3Browser'
+    'djangoS3Browser',
+
+    'corsheaders', #cors issue
 ]
 
 # DRF auth settings
@@ -131,7 +133,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'Khurm.urls'
 
