@@ -32,8 +32,10 @@ def get_upload_path(instance, filename):
 
 class File(models.Model):
     f_no = models.AutoField('파일번호', primary_key=True)
+    key = models.CharField(max_length=200, default='.')
     file = models.FileField(max_length=30)
-    loc = models.CharField(max_length=200, default='.')
+    text = models.CharField(max_length = 200)
+    url = models.CharField(max_length=200, default='.')
     file_type = models.CharField(max_length=20, default='None', blank = True)
     f_tag = models.TextField('남녀명수', max_length=200, default='None')
     created = models.DateTimeField('파일 생성일', auto_now_add=True) #!

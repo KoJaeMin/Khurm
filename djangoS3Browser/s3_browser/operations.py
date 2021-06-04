@@ -9,9 +9,9 @@ except ImportError:
 from django.conf import settings
 
 s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,)
 s3client = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,)
 bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
 bucket_location = s3client.get_bucket_location(Bucket=settings.AWS_STORAGE_BUCKET_NAME)
 """
@@ -41,10 +41,15 @@ def get_folder_with_items(main_folder, sort_a_z):
         result_files = get_files(main_folder, result.get('Contents'), sort_a_z) if result.get('Contents') else []
         result_folders = get_folders(main_folder, result.get('CommonPrefixes'), sort_a_z) if result.get(
             'CommonPrefixes') else []
+        
         return result_folders + result_files  # return files and folders
     except Exception as e:
         print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
+def get_s3_url(key):
+    object_url = "https://s3-{0}.amazonaws.com/{1}/{2}".format(
+        bucket_location['LocationConstraint'], settings.AWS_STORAGE_BUCKET_NAME, key)
+    return object_url
 
 def get_files(main_folder, result, sort_a_z):
     try:
@@ -93,6 +98,8 @@ def get_folders(main_folder, result, sort_a_z):
         return sorted(files_list, key=lambda k: str(k['key']).lower(), reverse=not sort_a_z)
     except Exception as e:
         print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+
+
 
 
 def upload_file(location, file):

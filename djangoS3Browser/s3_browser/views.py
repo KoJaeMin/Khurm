@@ -3,6 +3,7 @@ from typing import DefaultDict
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db import connection
 
 from .operations import *
 from .forms import PostForm
@@ -15,7 +16,6 @@ def get_folder_items(request, main_folder, sort_a_z):
     json_string = get_folder_with_items(main_folder, sort_a_z)
     return HttpResponse(json.dumps(json_string), content_type="application/json")
 
-
 @csrf_exempt
 def upload(request):
 
@@ -24,6 +24,9 @@ def upload(request):
     form.fields['file_type'].required = False
     form.fields['f_tag'].required = False
     form.fields['f_size'].required = False
+    form.fields['key'].required = False
+    form.fields['text'].required = False
+    form.fields['url'].required = False
 
     # file S3에 업로드 하는 부분
     file = request.FILES.get('file')
@@ -36,7 +39,11 @@ def upload(request):
         file_type = str(file).split('.')
         post.file_type = file_type[1]
         post.f_size = file.size
-
+        filekey = request.POST.get('loc', '')[1:] + file.name
+        post.key = filekey
+        post.url = get_s3_url(filekey)
+        post.text = file.name
+        
         post.save()
 
         path = settings.MEDIA_URL + request.FILES ['file'].name
@@ -49,7 +56,6 @@ def upload(request):
         post.save()
             
     return HttpResponse(json.dumps(file.name), content_type="application/json", status=200)
-
 
 @csrf_exempt
 def create_folder(request):
@@ -77,7 +83,7 @@ def rename_file(request):
 
 @csrf_exempt
 def paste_file(request):
-    paste(request.POST['loc'], request.POST.getlist('file_list[]'))
+    paste(request.POST.get('loc'), request.POST.getlist('file_list[]'))
     return HttpResponse(json.dumps("OK"), content_type="application/json", status=200)
 
 
@@ -90,4 +96,4 @@ def move_file(request):
 @csrf_exempt
 def delete_file(request):
     delete(request.POST.getlist('file_list[]'))
-    return HttpResponse(json.dumps("OK"), content_type="application/json", status=200)
+    return HttpResponse(json.dumps('ok'), content_type="application/json", status=200)

@@ -32,7 +32,7 @@
         <div class="col-sm-12">
             <!--File MAnager-->
             <nav class="navbar navbar-default pb-filemng-navbar">
-                <div class="container-fluid">
+                <div class="container-fluid" style="background-color: #42b983; color: black;" >
                     <!-- Navigation -->
                     <div class="navbar-header">
                         <button type="button" class="pull-left navbar-toggle collapsed treeview-toggle-btn"
@@ -66,37 +66,41 @@
                                                          title="{% trans "Sort Files" %}"></span></a></li>
                         <li><a href="#"><span class="fa fa-folder fa-lg" data-toggle="collapse"
                                               data-target="#collapseCreateFolder"
-                                              title="{% trans "Create Folder" %}"></span></a></li>
+                                              title="{% trans "Create Folder" %}">만들기</span></a></li>
                         <li><a href="#"><span class="fa fa-upload fa-lg" data-toggle="collapse"
-                                              data-target="#collapseUpload" title="{% trans "Upload" %}"></span></a>
+                                              data-target="#collapseUpload" title="{% trans "Upload" %}">업로드</span></a>
+                        </li>
+                        <li><a href="#"><span class="fa fa-search fa-lg" data-toggle="collapse"
+                            data-target="#collapseSearchFile"
+                            title="{% trans "File Search" %}">검색</span></a></li>
                         </li>
                         <li><a href="javascript:;" onclick="download_files();"><span class="fa fa-download fa-lg"
-                                                                                     title="{% trans "Download Selected File" %}"></span></a>
+                                                                                     title="{% trans "Download Selected File" %}">다운로드</span></a>
                         </li>
-                        <li><a href="javascript:;" onclick="copy_selected_file();"><span class="fa fa-lg fa-files-o"
+                        <!--<li><a href="javascript:;" onclick="copy_selected_file();"><span class="fa fa-lg fa-files-o"
                                                                                          title="{% trans "Copy Select Files" %}"></span></a>
-                        </li>
+                        </li>-->
                         <li><a href="javascript:;"><span class="fa fa-lg fa-trash-o" id="move_file"
                                                          onclick="delete_file();"
-                                                         title="{% trans "Delete  Select Files" %}"></span></a></li>
-                        <li><a href="javascript:;"><span class="fa fa-lg fa-clipboard hidden" id="paste_file"
+                                                         title="{% trans "Delete  Select Files" %}">삭제</span></a></li>
+                        <!--<li><a href="javascript:;"><span class="fa fa-lg fa-clipboard hidden" id="paste_file"
                                                          onclick="paste_file();"
                                                          title="{% trans "Paste Select Files" %}"></span></a></li>
                         <li><a href="javascript:;"><span class="fa fa-lg fa-arrows-alt hidden" id="move_file"
                                                          onclick="move_selected_file();"
-                                                         title="{% trans "Move  Select Files" %}"></span></a></li>
+                                                         title="{% trans "Move  Select Files" %}"></span></a></li>-->
                     </ul>
 
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="pb-filemng-navigation">
+                    <!--<div class="collapse navbar-collapse" id="pb-filemng-navigation">
                         <ul class="nav navbar-nav">
                             <li><a href="javascript:;" id="top_folder" data-top_folder="-" onclick="back_folder(this);"><span
                                     class="fa fa-chevron-left fa-lg"></span></a></li>
                             <li class="pb-filemng-active"><a href="javascript:;" onclick="get_files('-');"><span
                                     class="fa fa-home fa-lg"></span></a></li>
                         </ul>
-                    </div>
+                    </div>-->
                     <!-- /.navbar-collapse -->
 
                 </div>
@@ -114,6 +118,21 @@
                                 </div>
                                 <button type="button" class="btn btn-sm btn-primary"
                                         onclick="create_folder()">{% trans "Create" %}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Search File-->
+                <div class="collapse" id="collapseSearchFile">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input class="form-control" id="searched_folder_name"
+                                           placeholder="{% trans "File Name" %}">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                        onclick="search_folder()">{% trans "Search" %}</button>
                             </div>
                         </div>
                     </div>
@@ -271,6 +290,43 @@
         });
         $('#collapseCreateFolder').collapse("hide");
         get_files(loc);
+    }
+    function search_folder() {
+        var main_folder = $('#location').attr("data-location");
+        var file_name = $('#searched_folder_name').val();
+
+        $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
+        $('#location').attr("data-location", main_folder);
+
+        $('#current').html('현재 위치 ' + main_folder);
+
+        $(".pb-filemng-template-body").empty();
+        var get_files_url = "{% url 'get_folder_items' "arg1djs3server" "sort_a_z" %}".replace(/arg1djs3server/, main_folder.toString()).replace(/sort_a_z/, sort_a_z_value);
+        $.getJSON(
+            get_files_url, function (files_list) {
+                for (var key in files_list) {
+                    if (files_list[key].text.indexOf(file_name) === -1) continue;
+
+                    target = "";
+                    if ('folder' != files_list[key].type) {
+                        target = 'target="_blank"';
+                    }
+                    $(".pb-filemng-template-body").append(
+                        '<div class="col-sm-2 pb-filemng-body-folders" onClick="select_file(this);" ondblclick="open_item(this);" ' +
+                        'data-toggle="tooltip" ondrop="drop_file(event)" ondragover="allowDrop_file(event)" ondragstart="dragstart_file(event)" ondragend="dragend_file(event)" draggable="true" title="' + files_list[key].text +
+                        '" data-url="' + files_list[key].url + '" data-type="' + files_list[key].type + '">' +
+                        '<img src="' + files_list[key].icon + '"/></a>' + '<br />' +
+                        '<p class="pb-filemng-paragraphs" >' + files_list[key].text + '</p>' +
+                        '<span class="fa check-file"></span>' +
+                        '<span class="hide location-info">' + main_folder + files_list[key].text + '</span>' +
+                        '</div>'
+                    );
+                }
+                if (1 > files_list.length) {
+                    $(".pb-filemng-template-body").append('<p style="text-align:center">{% trans "Folder is Empty" %}</p>');
+                }
+            });
+
     }
 
     function sort_a_z(d) {
