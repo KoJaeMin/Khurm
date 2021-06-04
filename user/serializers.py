@@ -1,6 +1,7 @@
 # serializers.py
-# from rest_auth.registration.serializers import RegisterSerializer
+from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import LoginSerializer
+from rest_framework.authentication import TokenAuthentication
 from rest_auth.serializers import PasswordChangeSerializer, UserDetailsSerializer
 from rest_framework import serializers
 from user.models import User
@@ -20,8 +21,14 @@ class UserLoginSerializer(LoginSerializer):
 """
 
 
+
+class UserRegisterSerializer(RegisterSerializer):
+    pass
+
 class UserLoginSerializer(LoginSerializer):
+    #authentication_classes = (TokenAuthentication,)
     username = None
+
 
 
 # 프로필 수정
@@ -60,7 +67,3 @@ class UserInfoSerializer(UserDetailsSerializer):
         fields = ('pk', 'username', 'email', 'birth', 'phone', 'avail_storage', 'used_storage', 'kakao', 'naver',
                   'last_login', 'date_joined')
         read_only_fields = ('email', )
-
-
-# class UserRegisterSerializer(RegisterSerializer):
-#    username =None

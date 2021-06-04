@@ -6,9 +6,11 @@ from rest_auth.views import PasswordChangeView
 from rest_auth.views import UserDetailsView
 from rest_framework.generics import DestroyAPIView
 
+from rest_framework.authentication import TokenAuthentication
+
 from djangoS3Browser.s3_browser.operations import create_bucket#회원가입 시 버킷 생성
 
-from .serializers import UserLoginSerializer
+from .serializers import UserLoginSerializer, UserRegisterSerializer
 from .serializers import UserUpdateSerializer, UserInfoSerializer
 from user.models import User
 from django.contrib import auth
@@ -34,6 +36,9 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from json.decoder import JSONDecodeError
 from rest_framework import status
 
+from rest_auth.app_settings import create_token
+from rest_auth.utils import jwt_encode
+
 
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter
@@ -46,7 +51,18 @@ class NaverLogin(SocialLoginView):
 
 
 class UserLoginView(LoginView):
+    # authentication_classes=(TokenAuthentication,)
     serializer_class = UserLoginSerializer
+    # def post(self, request, *args, **kwargs):
+    #     self.request = request
+    #     print("request.data???",request.data)
+    #     self.serializer = self.get_serializer(data=self.request.data,
+    #                                           context={'request': request})
+    #     self.serializer.is_valid(raise_exception=True)
+
+    #     self.login()
+    #     return self.get_response()
+
 
     # def get_response(self):
     #     orginal_response = super().get_response()
@@ -60,7 +76,20 @@ class UserLoginView(LoginView):
 
 
 class UserSignupView(RegisterView):
-    print("새로 추가해요")
+    serializer_class=UserRegisterSerializer
+    print("회원가입 유저 새로 추가해야")
+    def perform_create(self, serializer):
+        user = serializer.save(self.request)
+        print(user.username,"name bucket will be created!")
+        create_bucket(user.username)
+        if getattr(settings, 'REST_USE_JWT', False):
+            print("REST_USE_JWT가 false로 되어있어?")
+            self.token = jwt_encode(user)
+        else:
+            print("REST_USE_JWT가 true지?")
+            create_token(self.token_model, user, serializer)
+
+        return user
     ###custom 해야함###
     # create_bucket(email.split('@')[0]+'1234')
     # settings.AWS_STORAGE_BUCKET_NAME=email.split('@')[0]+"1234"

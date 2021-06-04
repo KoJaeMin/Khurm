@@ -70,6 +70,10 @@ INSTALLED_APPS = [
     'djangoS3Browser'
 ]
 
+# 커스텀 로그인 위해 실험
+#REST_SESSION_LOGIN = False
+
+
 # DRF auth settings
 # Token 인증방식만 사용하게 됨.
 REST_FRAMEWORK = {
@@ -81,7 +85,11 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 로그인 과정에서 추가..
+        #'rest_framework.authentication.TokenAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'

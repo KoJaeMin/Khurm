@@ -39,7 +39,7 @@ loginButton.on("click",function(e) {
     var email = document.getElementById("loginemail");
     var password = document.getElementById("loginpassword");
     if(email.value=='' || password.value=='') {
-        alert("필수 항목을 입력해주세요");
+        //alert("필수 항목을 입력해주세요");
         if(email.value=='') {
             email.focus();
         }
@@ -92,7 +92,7 @@ loginButton.on("click",function(e) {
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',
-        url:'/rest-auth/login/',
+        url:'/user/login/',//rest-auth/login에서 바꿈
         data:d,
         processData:false,
         contentType:false,
@@ -101,7 +101,7 @@ loginButton.on("click",function(e) {
         success:function(data) {
             alert("로그인 완료");
             console.log(data);
-            top.location.href="/user/home";
+            //top.location.href="/";
             // $.ajax({
             //     type:'POST',
             //     enctype:'multipart/form-data',
@@ -139,7 +139,7 @@ registerButton.on("click",function(e) {
         return false;
     }
     if(email.value == '' || nickname.value == '' || password1.value == '' || password2.value == '') {
-        alert("필수 항목을 입력해주세요.");
+        //alert("필수 항목을 입력해주세요.");
         if(email.value=='') {
             email.focus();
         }
