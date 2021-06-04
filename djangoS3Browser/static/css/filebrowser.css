@@ -4,7 +4,9 @@
     border-width: 2px;
     margin-bottom: 20px;
 }
-
+.container-fluid{
+    background-color: #42b983;
+}
 /* skin.css Style*/
 .upload-drop-zone {
     color: #ccc;
@@ -90,7 +92,7 @@
 }
 
 .pb-filemng-paragraphs {
-    width: 130px;
+    /*width: 130px;*/
     height: 30px;
     overflow: hidden;
     text-overflow: ellipsis;

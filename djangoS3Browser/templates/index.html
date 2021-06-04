@@ -32,7 +32,7 @@
         <div class="col-sm-12">
             <!--File MAnager-->
             <nav class="navbar navbar-default pb-filemng-navbar">
-                <div class="container-fluid">
+                <div class="container-fluid" style="background-color: #42b983; color: black;" >
                     <!-- Navigation -->
                     <div class="navbar-header">
                         <button type="button" class="pull-left navbar-toggle collapsed treeview-toggle-btn"
@@ -66,37 +66,37 @@
                                                          title="{% trans "Sort Files" %}"></span></a></li>
                         <li><a href="#"><span class="fa fa-folder fa-lg" data-toggle="collapse"
                                               data-target="#collapseCreateFolder"
-                                              title="{% trans "Create Folder" %}"></span></a></li>
+                                              title="{% trans "Create Folder" %}">만들기</span></a></li>
                         <li><a href="#"><span class="fa fa-upload fa-lg" data-toggle="collapse"
-                                              data-target="#collapseUpload" title="{% trans "Upload" %}"></span></a>
+                                              data-target="#collapseUpload" title="{% trans "Upload" %}">업로드</span></a>
                         </li>
                         <li><a href="javascript:;" onclick="download_files();"><span class="fa fa-download fa-lg"
-                                                                                     title="{% trans "Download Selected File" %}"></span></a>
+                                                                                     title="{% trans "Download Selected File" %}">다운로드</span></a>
                         </li>
-                        <li><a href="javascript:;" onclick="copy_selected_file();"><span class="fa fa-lg fa-files-o"
+                        <!--<li><a href="javascript:;" onclick="copy_selected_file();"><span class="fa fa-lg fa-files-o"
                                                                                          title="{% trans "Copy Select Files" %}"></span></a>
-                        </li>
+                        </li>-->
                         <li><a href="javascript:;"><span class="fa fa-lg fa-trash-o" id="move_file"
                                                          onclick="delete_file();"
-                                                         title="{% trans "Delete  Select Files" %}"></span></a></li>
-                        <li><a href="javascript:;"><span class="fa fa-lg fa-clipboard hidden" id="paste_file"
+                                                         title="{% trans "Delete  Select Files" %}">삭제</span></a></li>
+                        <!--<li><a href="javascript:;"><span class="fa fa-lg fa-clipboard hidden" id="paste_file"
                                                          onclick="paste_file();"
                                                          title="{% trans "Paste Select Files" %}"></span></a></li>
                         <li><a href="javascript:;"><span class="fa fa-lg fa-arrows-alt hidden" id="move_file"
                                                          onclick="move_selected_file();"
-                                                         title="{% trans "Move  Select Files" %}"></span></a></li>
+                                                         title="{% trans "Move  Select Files" %}"></span></a></li>-->
                     </ul>
 
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="pb-filemng-navigation">
+                    <!--<div class="collapse navbar-collapse" id="pb-filemng-navigation">
                         <ul class="nav navbar-nav">
                             <li><a href="javascript:;" id="top_folder" data-top_folder="-" onclick="back_folder(this);"><span
                                     class="fa fa-chevron-left fa-lg"></span></a></li>
                             <li class="pb-filemng-active"><a href="javascript:;" onclick="get_files('-');"><span
                                     class="fa fa-home fa-lg"></span></a></li>
                         </ul>
-                    </div>
+                    </div>-->
                     <!-- /.navbar-collapse -->
 
                 </div>
