@@ -21,7 +21,7 @@ $(function(){
     
 })
 function clickonmenu(item){
-    $('.abstract').html(`<p>${item}</p>`);
+    $('.abstract > p').html(`${item}`);
     $.ajax({
         url:'/folder/', 
         success:function(data)

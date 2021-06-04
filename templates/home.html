@@ -29,21 +29,13 @@
         </div>
         <div class='contents'>
             <div class="blank_space"></div>
-            <div class="navigator_space">
-                <div id="search_box">
-                    <form accept-charset="utf-8" method ="get">
-                        <input type="text" placeholder="검색어를 입력하세요">
-                        <button type="submit"><img src="{% static 'img/search-solid.svg'%}"></button>
-                    </form>
-                </div>
-                <div class="menu_icon">
-                    <button id="setting"><img src="{% static 'img/user-circle-solid.svg'%}"></button>
-                    <button id="logout">로그아웃</button>
-                </div>
-            </div>
             <div id='file_content'>
                 <div class="abstract">
                     <p>홈</p>
+                    <div class="menu_icon">
+                        <button id="setting" onclick="location.href='#'"><img src="{% static 'img/user-circle-solid.svg'%}"></button>
+                        <button id="logout" onclick="location.href='#'">로그아웃</button>
+                    </div>
                 </div>
                 <div class='main_contents'>
                     {% load_s3 %}
