@@ -24,9 +24,9 @@ urlpatterns = [
     path('rest-auth/naver/', NaverLogin.as_view(), name="naver_login2django"),
     path('logout/', rest_auth.views.LogoutView.as_view()),
     path('detail/', rest_auth.views.UserDetailsView.as_view()),
-    path('home/', views.GoHome),
-    path('main/', views.mainlogin),
-    path('modify/',views.mainmodify),
+    path('home/', GoHome),
+    path('main/', mainlogin),
+    path('modify/',mainmodify),
     path('details/', UserInfoView.as_view()),  # 유저 프로필 조회
     path('update/', UserUpdateView.as_view()),  # 유저 프로필 수정
     path('delete/', UserDeleteView.as_view()), # 회원 탈퇴

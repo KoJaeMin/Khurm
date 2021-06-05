@@ -101,7 +101,7 @@ loginButton.on("click",function(e) {
         success:function(data) {
             alert("로그인 완료");
             console.log(data);
-            //top.location.href="/";
+            top.location.href="/user/home/";
             // $.ajax({
             //     type:'POST',
             //     enctype:'multipart/form-data',
