@@ -39,7 +39,7 @@ loginButton.on("click",function(e) {
     var email = document.getElementById("loginemail");
     var password = document.getElementById("loginpassword");
     if(email.value=='' || password.value=='') {
-        alert("필수 항목을 입력해주세요");
+        //alert("필수 항목을 입력해주세요");
         if(email.value=='') {
             email.focus();
         }
@@ -55,44 +55,10 @@ loginButton.on("click",function(e) {
     }
     var form = $('#login')[0];
     var d = new FormData(form);
-    // $.ajax({
-    //     type:'POST',
-    //     enctype:'multipart/form-data',
-    //     url:'/api-token-auth/',
-    //     data:d,
-    //     processData:false,
-    //     contentType:false,
-    //     cache:false,
-    //     timeout:600000,
-    //     success:function(data2) {
-    //         alert("로그인 완료");
-    //         console.log(data2['token']);
-    //         $.ajax({
-    //             type:'POST',
-    //             enctype:'multipart/form-data',
-    //             url:'/login/',
-    //             data:d,
-    //             processData:false,
-    //             contentType:false,
-    //             cache:false,
-    //             timeout:600000,
-    //             success:function(data) {
-    //                 sessionStorage.setItem("token",data2['token']);
-    //                 top.location.href = '/modify/';
-    //             },
-    //             error: function(request,status,error) {
-    //                 alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    //             }
-    //         });
-    //     },
-    //     error: function(request,status,error) {
-    //         alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    //     }
-    // });
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',
-        url:'/rest-auth/login/',
+        url:'/user/login/',//rest-auth/login에서 바꿈
         data:d,
         processData:false,
         contentType:false,
@@ -101,22 +67,8 @@ loginButton.on("click",function(e) {
         success:function(data) {
             alert("로그인 완료");
             console.log(data);
-            top.location.href="/user/home";
-            // $.ajax({
-            //     type:'POST',
-            //     enctype:'multipart/form-data',
-            //     url:'/api-token-auth/',
-            //     data:d,
-            //     processData:false,
-            //     contentType:false,
-            //     cache:false,
-            //     timeout:600000,
-            //     success:function(data2) {
-            //         alert("JWT 발급 완료");
-            //         console.log(data2);
-            //         top.location.href = '/user/home';
-            //     }
-            // })
+            sessionStorage.setItem("token",data['token']);
+            top.location.href="/user/home/";
         },
         error: function(request,status,error) {
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -139,7 +91,7 @@ registerButton.on("click",function(e) {
         return false;
     }
     if(email.value == '' || nickname.value == '' || password1.value == '' || password2.value == '') {
-        alert("필수 항목을 입력해주세요.");
+        //alert("필수 항목을 입력해주세요.");
         if(email.value=='') {
             email.focus();
         }

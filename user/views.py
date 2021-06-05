@@ -4,9 +4,14 @@ from django.views import View
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from rest_auth.views import PasswordChangeView
 from rest_auth.views import UserDetailsView
-from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import DestroyAPIView, GenericAPIView
 
-from .serializers import UserLoginSerializer
+from django.contrib.auth import login as django_login
+from rest_framework.authentication import TokenAuthentication
+
+from djangoS3Browser.s3_browser.operations import create_bucket#회원가입 시 버킷 생성
+
+from .serializers import UserLoginSerializer, UserRegisterSerializer
 from .serializers import UserUpdateSerializer, UserInfoSerializer
 from user.models import User
 from django.contrib import auth
@@ -18,7 +23,7 @@ import requests
 import urllib
 import jwt
 from django.contrib.auth.decorators import login_required
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -32,6 +37,33 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from json.decoder import JSONDecodeError
 from rest_framework import status
 
+from rest_auth.utils import jwt_encode
+from rest_auth.models import TokenModel
+from rest_auth.app_settings import JWTSerializer, TokenSerializer, create_token
+
+
+
+#정리좀하자
+
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.contrib.auth import login, authenticate
+from rest_auth.registration.views import RegisterView
+from rest_auth.serializers import PasswordChangeSerializer
+from rest_framework import views, status
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+
+from django.views.decorators.debug import sensitive_post_parameters
+
+sensitive_post_parameters_m = method_decorator(
+    sensitive_post_parameters(
+        'password', 'old_password', 'new_password1', 'new_password2'
+    )
+)
+
 
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter
@@ -43,8 +75,99 @@ class NaverLogin(SocialLoginView):
     adapter_class = NaverOAuth2Adapter
 
 
-class UserLoginView(LoginView):
+class UserLoginView(GenericAPIView):
+    #authentication_classes=(TokenAuthentication,)
+    permission_classes = (AllowAny,)
     serializer_class = UserLoginSerializer
+    token_model = TokenModel
+
+    @sensitive_post_parameters_m
+    def dispatch(self, *args, **kwargs):
+        return super(UserLoginView, self).dispatch(*args, **kwargs)
+
+    def process_login(self):
+        django_login(self.request, self.user)
+
+    def get_response_serializer(self):
+        if getattr(settings, 'REST_USE_JWT', False):
+            response_serializer = JWTSerializer
+        else:
+            response_serializer = TokenSerializer
+        return response_serializer
+
+    def login(self):
+        self.user = self.serializer.validated_data['user']
+
+        if getattr(settings, 'REST_USE_JWT', False):
+            self.token = jwt_encode(self.user)
+        else:
+            self.token = create_token(self.token_model, self.user,
+                                      self.serializer)
+
+        if getattr(settings, 'REST_SESSION_LOGIN', True):
+            self.process_login()
+
+    def get_response(self):
+        serializer_class = self.get_response_serializer()
+        print("get_response부분입니당", self.user)
+        settings.AWS_STORAGE_BUCKET_NAME='khurm'+str(self.user).split('@')[0]
+        print("개인 로그인 하면서 변경된 버킷이름 : ", 'khurm'+str(self.user).split('@')[0])
+        if getattr(settings, 'REST_USE_JWT', False):
+            data = {
+                'user': self.user,
+                'token': self.token
+            }
+            serializer = serializer_class(instance=data,
+                                          context={'request': self.request})
+        else:
+            serializer = serializer_class(instance=self.token,
+                                          context={'request': self.request})
+
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+        if getattr(settings, 'REST_USE_JWT', False):
+            from rest_framework_jwt.settings import api_settings as jwt_settings
+            if jwt_settings.JWT_AUTH_COOKIE:
+                from datetime import datetime
+                expiration = (datetime.utcnow() + jwt_settings.JWT_EXPIRATION_DELTA)
+                response.set_cookie(jwt_settings.JWT_AUTH_COOKIE,
+                                    self.token,
+                                    expires=expiration,
+                                    httponly=True)
+        return response
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        print("request.data 이젠 잘 보내지냐?", request.data)
+        self.serializer = self.get_serializer(data=self.request.data,
+                                              context={'request': request})
+        self.serializer.is_valid(raise_exception=True)
+
+        self.login()
+        return self.get_response()
+    
+
+
+class UserSignupView(RegisterView):
+    serializer_class=UserRegisterSerializer
+    print("회원가입 유저 새로 추가해야")
+    def perform_create(self, serializer):
+        user = serializer.save(self.request)
+        print("khurm"+user.username,"name bucket will be created!")
+        create_bucket("khurm"+user.username)
+        if getattr(settings, 'REST_USE_JWT', False):
+            print("REST_USE_JWT가 false로 되어있어?")
+            self.token = jwt_encode(user)
+        else:
+            print("REST_USE_JWT가 true지?")
+            create_token(self.token_model, user, serializer)
+
+        return user
+    ###custom 해야함###
+    # create_bucket(email.split('@')[0]+'1234')
+    # settings.AWS_STORAGE_BUCKET_NAME=email.split('@')[0]+"1234"
+    # print("실행할 bucket name : ",email.split('@')[0]+'1234')
+
+
     
 
 class UserUpdateView(PasswordChangeView):
@@ -52,6 +175,7 @@ class UserUpdateView(PasswordChangeView):
 
 class UserInfoView(UserDetailsView):
     serializer_class = UserInfoSerializer
+
 
 class UserDeleteView(DestroyAPIView):
     queryset = User.objects.all()
@@ -67,14 +191,10 @@ def GoHome(request):
     return render(request, 'home.html')
 
 
+#@login_required
 def mainmodify(request):
-    token=request.session.get('token','eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Im5hbWVzYWNlQGtha2FvLmNvbSIsImV4cCI6MTYyMzI2MjkwMSwiZW1haWwiOiJuYW1lc2FjZUBrYWthby5jb20iLCJvcmlnX2lhdCI6MTYyMjY1ODEwMX0.PbsWsdJzdoUMNPInZb5Szf_VtLKPaI4U9UsfF4OICU0')
-    # print("token : " + jwt.decode(token,"django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#",algorithm="HS256"))
-    # token=request.COOKIES.get('token')
-    decode = jwt.decode(token,"django-insecure-j36p+5o0v$(fb)2pgvfgo*wxeo_21*^s#xekayh(_^^m)ai&4#",algorithm="HS256")
-    # print("userid = " + decode["user_id"].__str__())
-    user = get_object_or_404(User,pk=decode["user_id"])
-    return render(request, 'modify.html',{'user':user})
+    return render(request, 'modify.html',{'user':request.user})
+
 
 class KakaoLoginView(View):
     def get(self, request):
@@ -121,6 +241,23 @@ class KakaoLoginCallbackView(View):
         kakao_id = user_data['id']
         username = user_data['properties']['nickname']
         email = user_data['kakao_account']['email']
+        
+        try:
+            # 사용자가 이미 존재할 때
+            if User.objects.filter(email = email).exists():
+                user = User.objects.get(email = email)
+                print("사용자 이미 존재해요")
+                settings.AWS_STORAGE_BUCKET_NAME='khurm'+email.split('@')[0]
+                return HttpResponseRedirect(success_url)
+            # 처음 로그인 하는 User 추가
+            else :
+                # User(email = email, username = kakao_id).save()
+                print("새로 추가해요")
+                create_bucket('khurm'+email.split('@')[0])
+                settings.AWS_STORAGE_BUCKET_NAME='khurm'+email.split('@')[0]
+            print("실행할 bucket name : ",'khurm'+email.split('@')[0])
+        except KeyError:
+            return JsonResponse({"message": "INVALID_KEYS"}, status = 400)
         token_url='http://127.0.0.1:8000/user/rest-auth/kakao/'
         data = {"access_token" : access_token}
         accept = requests.post(token_url,json=data)
@@ -130,29 +267,10 @@ class KakaoLoginCallbackView(View):
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
-#        accept_json.pop('user', None)
-
         return HttpResponseRedirect(success_url)
-#        return JsonResponse(accept_json)
+#        return JsonResponse(accept_json)하면 token으로 응답합니다 { token : ~ }
 
-        # try:
-        #     # 사용자가 이미 존재할 때
-        #     if User.objects.filter(email = email).exists():
-        #         user = User.objects.get(email = email)
-        #         #token = jwt.encode({"email" : email}, settings.SECRET_KEY, algorithm = "HS256")
-        #         #print("token encode :", token)
-        #         #token = token.decode("utf-8")
-        #         #print("token decode :", token)
-        #         return HttpResponseRedirect(success_url)
-        #     # 처음 로그인 하는 User 추가
-        #     else :
-        #         User(
-        #             email    = email,
-        #             username = kakao_id
-        #         ).save()
-        # except KeyError:    
-        #     return JsonResponse({"message": "INVALID_KEYS"}, status = 400)
-
+        
 
 class NaverLoginView(View):
     def get(self, request):

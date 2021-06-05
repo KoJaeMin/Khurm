@@ -94,19 +94,25 @@ modifyButton.on("click",function(e) {
     // }
     var form = $('#mod')[0];
     var d = new FormData(form);
+    var header=sessionStorage["token"];
+    console.log(d.get("birth"));
+    // alert(header);
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',
-        url:'/update/',
+        url:'/user/update/',
         data:d,
         processData:false,
         contentType:false,
         cache:false,
         timeout:600000,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization","JWT " + header);
+        },
         success:function(data) {
             alert("수정완료");
             console.log(data);
-            // top.location.href = '/test';
+            top.location.href = '/user/home';
         },
         error: function(e) {
             console.log(e);
