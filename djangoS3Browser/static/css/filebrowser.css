@@ -50,7 +50,7 @@
     border: none;
     cursor: pointer;
     outline: none;
-    color: gray;
+    color: rgb(255, 255, 255);
     padding: 0px 13px 0px 13px;
 }
 

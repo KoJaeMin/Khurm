@@ -25,6 +25,10 @@ urlpatterns = [
     path('logout/', rest_auth.views.LogoutView.as_view()),
     path('detail/', rest_auth.views.UserDetailsView.as_view()),
     path('home/', GoHome),
+    path('home/img_s3', views.GoImg),
+    path('home/shared_s3', views.GoShared),
+    path('home/favorite_s3', views.GoFavorite),
+    path('home/test', views.GoS3),
     path('main/', mainlogin),
     path('modify/',mainmodify),
     path('details/', UserInfoView.as_view()),  # 유저 프로필 조회
