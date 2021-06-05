@@ -62,7 +62,7 @@ class UserDeleteView(DestroyAPIView):
 def mainlogin(request):
     return render(request, 'main.html')
 
-@login_required
+#@login_required
 def GoHome(request):
     return render(request, 'home.html')
 
