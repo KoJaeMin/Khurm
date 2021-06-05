@@ -190,6 +190,17 @@ def mainlogin(request):
 def GoHome(request):
     return render(request, 'home.html')
 
+def GoImg(request):
+    return render(request,'img_s3.html')
+
+def GoShared(request):
+    return render(request,'shared_s3.html')
+
+def GoFavorite(request):
+    return render(request,'favorite_s3.html')
+
+def GoS3(request):
+    return render(request,'test.html')
 
 #@login_required
 def mainmodify(request):
