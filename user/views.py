@@ -152,8 +152,9 @@ class UserSignupView(RegisterView):
     print("회원가입 유저 새로 추가해야")
     def perform_create(self, serializer):
         user = serializer.save(self.request)
-        print("khurm"+user.username,"name bucket will be created!")
-        create_bucket("khurm"+user.username)
+        print("user:",user)
+        print("khurm"+str(user).split('@')[0]+"name bucket will be created!")
+        create_bucket("khurm"+str(user).split('@')[0])
         if getattr(settings, 'REST_USE_JWT', False):
             print("REST_USE_JWT가 false로 되어있어?")
             self.token = jwt_encode(user)
