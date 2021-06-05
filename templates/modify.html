@@ -10,7 +10,7 @@
 	<link rel='stylesheet' href='{% static "css/modify_style.css"%}' type='text/css' media='all'/>
 </head>
 <body class="frontpage">
-{{user}}
+	<!-- {{user.birth}} -->
 <section id="home">
 	<div class="container">
 		<div class="textwidget">
@@ -29,13 +29,13 @@
 						<div class="contactstyle t opform">
 							<form method="post" id="mod">
 								<div class="form">
-									{% csrf_token %}
+									<!-- {% csrf_token %} -->
 									<input type="text" name='username' id="modnickname" placeholder="nickname" value="{{user.username}}" >
 									<input type="password" name='password' id="modoldpassword" placeholder="Old Password">
-									<input type="password" name='password1' id="modpassword1" placeholder="New Password">
-									<input type="password" name='password2' id="modpassword2" placeholder="Re-enter new password">
-									<input type="text" name='phonenumber' id="phonenumber" onKeyup="inputPhoneNumber(this);" placeholder="Phone-number" value="{{ user.phone }}">
-									<input type="date" id="birthdate" value={{user.birth}}>
+									<input type="password" name='new_password1' id="modpassword1" placeholder="New Password">
+									<input type="password" name='new_password2' id="modpassword2" placeholder="Re-enter new password">
+									<input type="text" name='phone' id="phonenumber" onKeyup="inputPhoneNumber(this);" placeholder="Phone-number" value="{{ user.phone }}">
+									<input type="date"  name='birth' id="birth" value={{user.birth}}>
 									<input type="button" id="modify" class="clearfix" value="변경하기">
 									<input type="button" id="withdrawal" class="clearfix" style="background-color:red; color:white;" value="탈퇴하기">
 								</div>

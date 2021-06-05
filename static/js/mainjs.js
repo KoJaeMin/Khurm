@@ -55,40 +55,6 @@ loginButton.on("click",function(e) {
     }
     var form = $('#login')[0];
     var d = new FormData(form);
-    // $.ajax({
-    //     type:'POST',
-    //     enctype:'multipart/form-data',
-    //     url:'/api-token-auth/',
-    //     data:d,
-    //     processData:false,
-    //     contentType:false,
-    //     cache:false,
-    //     timeout:600000,
-    //     success:function(data2) {
-    //         alert("로그인 완료");
-    //         console.log(data2['token']);
-    //         $.ajax({
-    //             type:'POST',
-    //             enctype:'multipart/form-data',
-    //             url:'/login/',
-    //             data:d,
-    //             processData:false,
-    //             contentType:false,
-    //             cache:false,
-    //             timeout:600000,
-    //             success:function(data) {
-    //                 sessionStorage.setItem("token",data2['token']);
-    //                 top.location.href = '/modify/';
-    //             },
-    //             error: function(request,status,error) {
-    //                 alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    //             }
-    //         });
-    //     },
-    //     error: function(request,status,error) {
-    //         alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    //     }
-    // });
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',
@@ -101,22 +67,8 @@ loginButton.on("click",function(e) {
         success:function(data) {
             alert("로그인 완료");
             console.log(data);
+            sessionStorage.setItem("token",data['token']);
             top.location.href="/user/home/";
-            // $.ajax({
-            //     type:'POST',
-            //     enctype:'multipart/form-data',
-            //     url:'/api-token-auth/',
-            //     data:d,
-            //     processData:false,
-            //     contentType:false,
-            //     cache:false,
-            //     timeout:600000,
-            //     success:function(data2) {
-            //         alert("JWT 발급 완료");
-            //         console.log(data2);
-            //         top.location.href = '/user/home';
-            //     }
-            // })
         },
         error: function(request,status,error) {
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
