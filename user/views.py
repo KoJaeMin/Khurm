@@ -68,7 +68,7 @@ sensitive_post_parameters_m = method_decorator(
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter
     client_class = OAuth2Client###
-    callback_url = "http://127.0.0.1:8000/user/kakao/login/callback/"
+    callback_url = "http://52.4.162.49/user/kakao/login/callback/"
 
     
 class NaverLogin(SocialLoginView):
@@ -199,7 +199,7 @@ def mainmodify(request):
 class KakaoLoginView(View):
     def get(self, request):
         client_id = settings.KAKAO_KEY
-        redirect_uri = "http://127.0.0.1:8000/user/kakao/login/callback/"
+        redirect_uri = "http://52.4.162.49/user/kakao/login/callback/"
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
@@ -218,7 +218,7 @@ class KakaoLoginCallbackView(View):
         body = {
             'grant_type': 'authorization_code',
             'client_id': settings.KAKAO_KEY,
-            'redirect_url': 'http://127.0.0.1:8000/user/kakao/login/callback',
+            'redirect_url': 'http://52.4.162.49/user/kakao/login/callback',
             'code': kakao_access_code
         }
         kakao_reponse = requests.post(url, headers=headers, data=body)
@@ -258,7 +258,7 @@ class KakaoLoginCallbackView(View):
             print("실행할 bucket name : ",'khurm'+email.split('@')[0])
         except KeyError:
             return JsonResponse({"message": "INVALID_KEYS"}, status = 400)
-        token_url='http://127.0.0.1:8000/user/rest-auth/kakao/'
+        token_url='http://52.4.162.49/user/rest-auth/kakao/'
         data = {"access_token" : access_token}
         accept = requests.post(token_url,json=data)
         accept_status = accept.status_code
@@ -275,7 +275,7 @@ class KakaoLoginCallbackView(View):
 class NaverLoginView(View):
     def get(self, request):
         client_id = settings.NAVER_ID
-        redirect_uri = "http://127.0.0.1:8000/user/naver/login/callback/"
+        redirect_uri = "http://52.4.162.49/user/naver/login/callback/"
         state = 'RANDOM_STATE'#request.GET.get("csrfmiddlewaretoken")
         return redirect(
             f"https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id={client_id}&state={state}&redirect_uri={redirect_uri}"
@@ -300,7 +300,7 @@ class NaverLoginCallbackView(View):
             'client_secret': settings.NAVER_SECRET,
             'code': code,
             'state': state,
-            'redirectURI': 'http://127.0.0.1:8000/user/naver/login/callback/',
+            'redirectURI': 'http://52.4.162.49/user/naver/login/callback/',
         }
         token_url = '{base}?{params}'.format(
             base=token_base_url,
@@ -319,7 +319,7 @@ class NaverLoginCallbackView(View):
         email=user_info['response']['email']
         username = user_info['response']['nickname']
 
-        token_url='http://127.0.0.1:8000/user/rest-auth/naver/'
+        token_url='http://52.4.162.49/user/rest-auth/naver/'
         data = {"access_token" : access_token}
         accept = requests.post(token_url,json=data)
         accept_status = accept.status_code
