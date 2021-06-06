@@ -66,37 +66,9 @@ function inputPhoneNumber(obj) {
 
 var modifyButton = $("#modify");
 modifyButton.on("click",function(e) {
-    // var email = document.getElementById("regemail");
-    // var oldpassword = document.getElementById("regnickname");
-    // var nickname = document.getElementById("regnickname");
-    // var password1 = document.getElementById("regpassword1");
-    // var password2 = document.getElementById("regpassword2");
-    // if(email.value == '' || nickname.value == '' || password1.value == '' || password2.value == '') {
-    //     alert("필수 항목을 입력해주세요.");
-    //     if(email.value=='') {
-    //         email.focus();
-    //     }
-    //     else if(nickname.value=='') {
-    //         nickname.focus();
-    //     }
-    //     else if(password1.value=='') {
-    //         password1.focus();
-    //     }
-    //     else {
-    //         password2.focus();
-    //     }
-    //     return false;
-    // }
-    // if(password1.value != password2.value) {
-    //     alert("패스워드가 다릅니다.");
-    //     password2.focus();
-    //     return false;
-    // }
     var form = $('#mod')[0];
     var d = new FormData(form);
     var header=sessionStorage["token"];
-    console.log(d.get("birth"));
-    // alert(header);
     $.ajax({
         type:'POST',
         enctype:'multipart/form-data',

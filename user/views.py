@@ -152,8 +152,9 @@ class UserSignupView(RegisterView):
     print("회원가입 유저 새로 추가해야")
     def perform_create(self, serializer):
         user = serializer.save(self.request)
-        print("khurm"+user.username,"name bucket will be created!")
-        create_bucket("khurm"+user.username)
+        print("user:",user)
+        print("khurm"+str(user).split('@')[0]+"name bucket will be created!")
+        create_bucket("khurm"+str(user).split('@')[0])
         if getattr(settings, 'REST_USE_JWT', False):
             print("REST_USE_JWT가 false로 되어있어?")
             self.token = jwt_encode(user)
@@ -190,6 +191,17 @@ def mainlogin(request):
 def GoHome(request):
     return render(request, 'home.html')
 
+def GoImg(request):
+    return render(request,'img_s3.html')
+
+def GoShared(request):
+    return render(request,'shared_s3.html')
+
+def GoFavorite(request):
+    return render(request,'favorite_s3.html')
+
+def GoS3(request):
+    return render(request,'test.html')
 
 #@login_required
 def mainmodify(request):
