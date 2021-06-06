@@ -255,7 +255,7 @@ AWS_HEADERS = {
     'Cache-Control': bytes(control, encoding='latin-1')
 }
 S3_BROWSER_SETTINGS = "djangoS3Browser"
-
+EC2_IP = secrets['EC2_IP'] #ec2 배포
 
 # DEFAULT_FILE_STORAGE = 'Khurm.storages.S3DefaultStorage'
 # STATICFILES_STORAGE = 'Khurm.storages.S3StaticStorage'
