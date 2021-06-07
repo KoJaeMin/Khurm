@@ -13,8 +13,7 @@ urlpatterns = [
     
     path('login/', UserLoginView.as_view()),
     path('/', include('rest_auth.urls')),
-    
-    
+
     path('kakao/login', KakaoLoginView.as_view(), name="kakao-login"),
     path("kakao/login/callback/", KakaoLoginCallbackView.as_view(), name="kakao-login-callback"),
     path('naver/login', NaverLoginView.as_view(), name="naver-login"),

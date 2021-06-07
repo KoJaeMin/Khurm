@@ -106,7 +106,7 @@ class FavoriteViewset(viewsets.ModelViewSet):
             return queryset.filter(user_no=User.objects.get(id=no))
         elif type=='file':# 파일기준으로 즐겨찾기되어 있는 유저 필터링
             return queryset.filter(file_no=File.objects.get(f_no=no))
-        elif type=='my': # 로그인한 유저에게 즐겨찾기기되어 는 레코드 필터링
+        elif type=='my': # 로그인한 유저에게 즐겨찾기되어 있는 레코드 필터링
             return queryset.filter(user_no=self.request.user)
 
         return queryset
