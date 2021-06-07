@@ -24,6 +24,7 @@ def upload(request):
     form.fields['file_type'].required = False
     form.fields['f_tag'].required = False
     form.fields['f_size'].required = False
+    ###안되면 밑에 3개 주석처리해주세요###
     form.fields['key'].required = False
     form.fields['text'].required = False
     form.fields['url'].required = False
