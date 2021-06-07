@@ -71,7 +71,7 @@
                                               data-target="#collapseUpload" title="{% trans "Upload" %}" style="color: #fff;">업로드</span></a>
                         </li>-->
                         <li>
-                            <a href="#"><span class="fa fa-star fa-lg" onclick=""
+                            <a href="#"><span class="fa fa-star fa-lg" onclick="move_selected_favorite_file();"
                                 title="{% trans "Favorite Files" %}" style="color: #fff;">즐겨찾기</span></a>
                         </li>
                         <!--<li><a href="#"><span class="fa fa-search fa-lg" data-toggle="collapse"
@@ -85,7 +85,7 @@
                                                                                          title="{% trans "Copy Select Files" %}"></span></a>
                         </li>-->
                         <li>
-                            <a href="#"><span class="fa fa-share-alt fa-lg" onclick=""
+                            <a href="#"><span class="fa fa-share-alt fa-lg" onclick="move_selected_shared_file();"
                                 title="{% trans "Shre Selected Files" %}" style="color: #fff;">공유</span></a>
                         </li>
                         <li><a href="javascript:;"><span class="fa fa-lg fa-trash-o" id="move_file"
@@ -196,7 +196,7 @@
             </div>
         </div>
     </div>
-    <div id="location" data-location="-"></div>
+    <div id="location" data-location="{{root}}"></div>
 </div>
 <script>
     +function ($) {
@@ -279,7 +279,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        get_files("-");
+        get_files("{{root}}");
     });
 
     var selected_file_list = [];
@@ -410,7 +410,7 @@
         url = d.getAttribute("data-url");
         type = d.getAttribute("data-type");
         if (type === 'folder') {
-            get_files("-" + url)
+            get_files("{{root}}" + url)
         } else {
             window.open(url, '_blank');
         }
@@ -429,7 +429,7 @@
             top_loc = top_loc + loc_array[i] + "/"
         }
         if (1 > top_loc.length) {
-            top_loc = "-"
+            top_loc = "{{root}}"
         }
         $('#top_folder').attr("data-top_folder", top_loc);
     }
@@ -458,7 +458,7 @@
                         '<input  type="text" class="form-control hidden rename-input" onfocusout="rename_file_onfocusout(this);" value="' + files_list[key].text + '">' +
                         '<span class="fa check-file"></span>' +
                         '<span class="hide location-info">' + main_folder + files_list[key].text + '</span>' +
-                        '</div>'
+                        '</div>' +'<p>'+ files_list[key].url +'</p>'
                     );
                 }
                 if (1 > files_list.length) {
@@ -471,6 +471,21 @@
         for (var key in selected_file_list) {
             window.open("{% url 'download' %}" + "?file=" + selected_file_list[key], "_blank");
         }
+    }
+    function favorite(files){
+        $.each(selected_file_list, (key,file)=>{
+            var data = new FormData();
+            data.append("file", file);
+            data.append("loc", loc);
+            $.ajax({
+                url: '{% url "upload" %}',
+                contentType: false,
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+            });
+        });
+        get_files(loc);
     }
 
     {#rename item focus#}
@@ -521,6 +536,18 @@
         move_file($('#location').attr("data-location"), copy_selected_file_list);
     }
 
+    function move_selected_favorite_file(d){
+        copy_selected_file();
+        paste_file()
+        move_file("{{favorite}}", selected_file_list);
+    }
+
+    function move_selected_shared_file(d){
+        copy_selected_file();
+        paste_file()
+        move_file("{{home}}", selected_file_list);
+    }
+
     {#drag and drop file for move file start#}
 
     function dragstart_file(e) {
@@ -538,7 +565,7 @@
     function drop_file(e) {
         e.preventDefault();
         if ($(e.target).parent().attr("data-type") === 'folder') {
-            move_file("-" + $(e.target).parent().attr("title"), selected_file_list);
+            move_file("{{root}}" + $(e.target).parent().attr("title"), selected_file_list);
         }
     }
 

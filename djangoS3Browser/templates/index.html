@@ -70,8 +70,7 @@
                         <li><a href="#"><span class="fa fa-upload fa-lg" data-toggle="collapse"
                                               data-target="#collapseUpload" title="{% trans "Upload" %}" style="color: #fff;">업로드</span></a>
                         </li>
-                        <li>
-                            <a href="#"><span class="fa fa-star fa-lg" onclick=""
+                        <li><a href="#"><span class="fa fa-star fa-lg" onclick="move_selected_favorite_file();"
                                 title="{% trans "Favorite Files" %}" style="color: #fff;">즐겨찾기</span></a>
                         </li>
                         <li><a href="#"><span class="fa fa-search fa-lg" data-toggle="collapse"
@@ -85,7 +84,7 @@
                                                                                          title="{% trans "Copy Select Files" %}"></span></a>
                         </li>-->
                         <li>
-                            <a href="#"><span class="fa fa-share-alt fa-lg" onclick=""
+                            <a href="#"><span class="fa fa-share-alt fa-lg" onclick="move_selected_shared_file();"
                                 title="{% trans "Shred Files" %}" style="color: #fff;">공유</span></a>
                         </li>
                         <li><a href="javascript:;"><span class="fa fa-lg fa-trash-o" id="move_file"
@@ -196,7 +195,7 @@
             </div>
         </div>
     </div>
-    <div id="location" data-location="-"></div>
+    <div id="location" data-location="{{root}}"></div>
 </div>
 <script>
     +function ($) {
@@ -279,7 +278,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        get_files("-");
+        get_files("{{root}}");
     });
 
     var selected_file_list = [];
@@ -305,8 +304,6 @@
 
         $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
         $('#location').attr("data-location", main_folder);
-
-
         $(".pb-filemng-template-body").empty();
         var get_files_url = "{% url 'get_folder_items' "arg1djs3server" "sort_a_z" %}".replace(/arg1djs3server/, main_folder.toString()).replace(/sort_a_z/, sort_a_z_value);
         $.getJSON(
@@ -362,15 +359,15 @@
 
     function copy_selected_file() {
         copy_selected_file_list = selected_file_list;
-        $('#paste_file').removeClass('hidden');
-        $('#move_file').removeClass('hidden');
+        //$('#paste_file').removeClass('hidden');
+        //$('#move_file').removeClass('hidden');
     }
 
 
     function paste_file() {
         loc = $('#location').attr("data-location");
-        $('#paste_file').toggleClass('hidden');
-        $('#move_file').toggleClass('hidden');
+        //$('#paste_file').toggleClass('hidden');
+        //$('#move_file').toggleClass('hidden');
         data = {'loc': loc, 'file_list': copy_selected_file_list};
         $.ajax({
             url: '{% url "paste_file" %}',
@@ -398,6 +395,7 @@
             },
         });
     }
+    
 
 
     function refresh_folder() {
@@ -410,7 +408,7 @@
         url = d.getAttribute("data-url");
         type = d.getAttribute("data-type");
         if (type === 'folder') {
-            get_files("-" + url)
+            get_files("{{root}}" + url)
         } else {
             window.open(url, '_blank');
         }
@@ -429,7 +427,7 @@
             top_loc = top_loc + loc_array[i] + "/"
         }
         if (1 > top_loc.length) {
-            top_loc = "-"
+            top_loc = "{{root}}"
         }
         $('#top_folder').attr("data-top_folder", top_loc);
     }
@@ -502,8 +500,8 @@
     }
 
     function move_file(loc, file_list) {
-        $('#move_file').toggleClass('hidden');
-        $('#paste_file').toggleClass('hidden');
+        //$('#move_file').toggleClass('hidden');
+        //$('#paste_file').toggleClass('hidden');
         data = {'loc': loc, 'file_list': file_list};
         $.ajax({
             url: '{% url "move_file" %}',
@@ -519,6 +517,18 @@
 
     function move_selected_file(d) {
         move_file($('#location').attr("data-location"), copy_selected_file_list);
+    }
+
+    function move_selected_favorite_file(d){
+        copy_selected_file();
+        paste_file()
+        move_file("{{favorite}}", selected_file_list);
+    }
+
+    function move_selected_shared_file(d){
+        copy_selected_file();
+        paste_file()
+        move_file("{{shared}}", selected_file_list);
     }
 
     {#drag and drop file for move file start#}
@@ -538,7 +548,7 @@
     function drop_file(e) {
         e.preventDefault();
         if ($(e.target).parent().attr("data-type") === 'folder') {
-            move_file("-" + $(e.target).parent().attr("title"), selected_file_list);
+            move_file("{{root}}" + $(e.target).parent().attr("title"), selected_file_list);
         }
     }
 
