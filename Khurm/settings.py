@@ -67,7 +67,9 @@ INSTALLED_APPS = [
     'folder',
     'Khurm',
     'storages',
-    'djangoS3Browser'
+    'djangoS3Browser',
+
+    'corsheaders', #cors issue
 ]
 
 # 커스텀 로그인 위해 실험
@@ -141,7 +143,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'Khurm.urls'
 
@@ -195,9 +199,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+  #  {
+  #      'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+  #  },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
@@ -251,7 +255,7 @@ AWS_HEADERS = {
     'Cache-Control': bytes(control, encoding='latin-1')
 }
 S3_BROWSER_SETTINGS = "djangoS3Browser"
-
+EC2_IP = secrets['EC2_IP'] #ec2 배포
 
 # DEFAULT_FILE_STORAGE = 'Khurm.storages.S3DefaultStorage'
 # STATICFILES_STORAGE = 'Khurm.storages.S3StaticStorage'

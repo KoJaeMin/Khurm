@@ -9,7 +9,7 @@ from rest_framework.generics import DestroyAPIView, GenericAPIView
 from django.contrib.auth import login as django_login
 from rest_framework.authentication import TokenAuthentication
 
-from djangoS3Browser.s3_browser.operations import create_bucket#회원가입 시 버킷 생성
+from djangoS3Browser.s3_browser.operations import create_bucket  # 회원가입 시 버킷 생성
 
 from .serializers import UserLoginSerializer, UserRegisterSerializer
 from .serializers import UserUpdateSerializer, UserInfoSerializer
@@ -28,7 +28,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.views import LoginView
-#from . import forms, models, mixins
+# from . import forms, models, mixins
 
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.naver.views import NaverOAuth2Adapter
@@ -41,9 +41,7 @@ from rest_auth.utils import jwt_encode
 from rest_auth.models import TokenModel
 from rest_auth.app_settings import JWTSerializer, TokenSerializer, create_token
 
-
-
-#정리좀하자
+# 정리좀하자
 
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -56,6 +54,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 
+from django.conf import settings
+
+#ec2 배포
+HOST = getattr(settings, 'EC2_IP', '')
+
 from django.views.decorators.debug import sensitive_post_parameters
 
 sensitive_post_parameters_m = method_decorator(
@@ -67,16 +70,16 @@ sensitive_post_parameters_m = method_decorator(
 
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter
-    client_class = OAuth2Client###
-    callback_url = "http://127.0.0.1:8000/user/kakao/login/callback/"
+    client_class = OAuth2Client  ###
+    callback_url = "http://"+HOST+"/user/kakao/login/callback/"
 
-    
+
 class NaverLogin(SocialLoginView):
     adapter_class = NaverOAuth2Adapter
 
 
 class UserLoginView(GenericAPIView):
-    #authentication_classes=(TokenAuthentication,)
+    # authentication_classes=(TokenAuthentication,)
     permission_classes = (AllowAny,)
     serializer_class = UserLoginSerializer
     token_model = TokenModel
@@ -110,8 +113,8 @@ class UserLoginView(GenericAPIView):
     def get_response(self):
         serializer_class = self.get_response_serializer()
         print("get_response부분입니당", self.user)
-        settings.AWS_STORAGE_BUCKET_NAME='khurm'+str(self.user).split('@')[0]
-        print("개인 로그인 하면서 변경된 버킷이름 : ", 'khurm'+str(self.user).split('@')[0])
+        settings.AWS_STORAGE_BUCKET_NAME = 'khurm' + str(self.user).split('@')[0]
+        print("개인 로그인 하면서 변경된 버킷이름 : ", 'khurm' + str(self.user).split('@')[0])
         if getattr(settings, 'REST_USE_JWT', False):
             data = {
                 'user': self.user,
@@ -144,17 +147,17 @@ class UserLoginView(GenericAPIView):
 
         self.login()
         return self.get_response()
-    
 
 
 class UserSignupView(RegisterView):
-    serializer_class=UserRegisterSerializer
+    serializer_class = UserRegisterSerializer
     print("회원가입 유저 새로 추가해야")
+
     def perform_create(self, serializer):
         user = serializer.save(self.request)
-        print("user:",user)
-        print("khurm"+str(user).split('@')[0]+"name bucket will be created!")
-        create_bucket("khurm"+str(user).split('@')[0])
+        print("user:", user)
+        print("khurm" + str(user).split('@')[0] + "name bucket will be created!")
+        create_bucket("khurm" + str(user).split('@')[0])
         if getattr(settings, 'REST_USE_JWT', False):
             print("REST_USE_JWT가 false로 되어있어?")
             self.token = jwt_encode(user)
@@ -169,10 +172,9 @@ class UserSignupView(RegisterView):
     # print("실행할 bucket name : ",email.split('@')[0]+'1234')
 
 
-    
-
 class UserUpdateView(PasswordChangeView):
     serializer_class = UserUpdateSerializer
+
 
 class UserInfoView(UserDetailsView):
     serializer_class = UserInfoSerializer
@@ -181,41 +183,48 @@ class UserInfoView(UserDetailsView):
 class UserDeleteView(DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserInfoSerializer
+
     def get_object(self):
         return self.request.user
+
 
 def mainlogin(request):
     return render(request, 'main.html')
 
-#@login_required
+
+# @login_required
 def GoHome(request):
     return render(request, 'home.html')
 
+
 def GoImg(request):
-    return render(request,'img_s3.html')
+    return render(request, 'img_s3.html')
+
 
 def GoShared(request):
-    return render(request,'shared_s3.html')
+    return render(request, 'shared_s3.html')
+
 
 def GoFavorite(request):
-    return render(request,'favorite_s3.html')
+    return render(request, 'favorite_s3.html')
+
 
 def GoS3(request):
-    return render(request,'test.html')
+    return render(request, 'test.html')
 
-#@login_required
+
+# @login_required
 def mainmodify(request):
-    return render(request, 'modify.html',{'user':request.user})
+    return render(request, 'modify.html', {'user': request.user})
 
 
 class KakaoLoginView(View):
     def get(self, request):
         client_id = settings.KAKAO_KEY
-        redirect_uri = "http://127.0.0.1:8000/user/kakao/login/callback/"
+        redirect_uri = "http://"+HOST+"/user/kakao/login/callback/"
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
-
 
 
 class KakaoLoginCallbackView(View):
@@ -230,7 +239,7 @@ class KakaoLoginCallbackView(View):
         body = {
             'grant_type': 'authorization_code',
             'client_id': settings.KAKAO_KEY,
-            'redirect_url': 'http://127.0.0.1:8000/user/kakao/login/callback',
+            'redirect_url': "http://"+HOST+"/user/kakao/login/callback",
             'code': kakao_access_code
         }
         kakao_reponse = requests.post(url, headers=headers, data=body)
@@ -253,26 +262,26 @@ class KakaoLoginCallbackView(View):
         kakao_id = user_data['id']
         username = user_data['properties']['nickname']
         email = user_data['kakao_account']['email']
-        
+
         try:
             # 사용자가 이미 존재할 때
-            if User.objects.filter(email = email).exists():
-                user = User.objects.get(email = email)
+            if User.objects.filter(email=email).exists():
+                user = User.objects.get(email=email)
                 print("사용자 이미 존재해요")
-                settings.AWS_STORAGE_BUCKET_NAME='khurm'+email.split('@')[0]
+                settings.AWS_STORAGE_BUCKET_NAME = 'khurm' + email.split('@')[0]
                 return HttpResponseRedirect(success_url)
             # 처음 로그인 하는 User 추가
-            else :
+            else:
                 # User(email = email, username = kakao_id).save()
                 print("새로 추가해요")
-                create_bucket('khurm'+email.split('@')[0])
-                settings.AWS_STORAGE_BUCKET_NAME='khurm'+email.split('@')[0]
-            print("실행할 bucket name : ",'khurm'+email.split('@')[0])
+                create_bucket('khurm' + email.split('@')[0])
+                settings.AWS_STORAGE_BUCKET_NAME = 'khurm' + email.split('@')[0]
+            print("실행할 bucket name : ", 'khurm' + email.split('@')[0])
         except KeyError:
-            return JsonResponse({"message": "INVALID_KEYS"}, status = 400)
-        token_url='http://127.0.0.1:8000/user/rest-auth/kakao/'
-        data = {"access_token" : access_token}
-        accept = requests.post(token_url,json=data)
+            return JsonResponse({"message": "INVALID_KEYS"}, status=400)
+        token_url = "http://"+HOST+"/user/rest-auth/kakao/"
+        data = {"access_token": access_token}
+        accept = requests.post(token_url, json=data)
         accept_status = accept.status_code
         print(accept.json())
         if accept_status != 200:
@@ -280,15 +289,16 @@ class KakaoLoginCallbackView(View):
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
         return HttpResponseRedirect(success_url)
+
+
 #        return JsonResponse(accept_json)하면 token으로 응답합니다 { token : ~ }
 
-        
 
 class NaverLoginView(View):
     def get(self, request):
         client_id = settings.NAVER_ID
-        redirect_uri = "http://127.0.0.1:8000/user/naver/login/callback/"
-        state = 'RANDOM_STATE'#request.GET.get("csrfmiddlewaretoken")
+        redirect_uri = "http://"+HOST+"/user/naver/login/callback/"
+        state = 'RANDOM_STATE'  # request.GET.get("csrfmiddlewaretoken")
         return redirect(
             f"https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id={client_id}&state={state}&redirect_uri={redirect_uri}"
         )
@@ -312,7 +322,7 @@ class NaverLoginCallbackView(View):
             'client_secret': settings.NAVER_SECRET,
             'code': code,
             'state': state,
-            'redirectURI': 'http://127.0.0.1:8000/user/naver/login/callback/',
+            'redirectURI': "http://"+HOST+"/user/naver/login/callback/",
         }
         token_url = '{base}?{params}'.format(
             base=token_base_url,
@@ -328,19 +338,19 @@ class NaverLoginCallbackView(View):
         }
         response = requests.get(me_url, headers=me_headers)
         user_info = response.json()
-        email=user_info['response']['email']
+        email = user_info['response']['email']
         username = user_info['response']['nickname']
 
-        token_url='http://127.0.0.1:8000/user/rest-auth/naver/'
-        data = {"access_token" : access_token}
-        accept = requests.post(token_url,json=data)
+        token_url = "http://"+HOST+"/user/rest-auth/naver/"
+        data = {"access_token": access_token}
+        accept = requests.post(token_url, json=data)
         accept_status = accept.status_code
         print(accept.json())
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
-        #accept_json.pop('user', None)
-        #return JsonResponse(accept_json)
+        # accept_json.pop('user', None)
+        # return JsonResponse(accept_json)
 
         return HttpResponseRedirect(success_url)

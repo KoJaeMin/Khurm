@@ -47,3 +47,4 @@ typing-extensions==3.7.4.3
 urllib3==1.26.4
 utility==1.0
 white==0.1.2
+django-cors-headers==3.7.0
