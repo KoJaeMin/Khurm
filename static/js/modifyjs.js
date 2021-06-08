@@ -114,7 +114,7 @@ withdrawButton.on("click",function(e) {
         success:function(data) {
             alert("삭제 완료");
             console.log(data);
-            top.location.href = '/main';
+            top.location.href = '/user/main';
         },
         error: function(e) {
             console.log(e);
