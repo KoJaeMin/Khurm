@@ -81,6 +81,8 @@
                         <li><a href=# onclick="search_man();"><span class="fa fa-male fa-lg" title="{% trans "남성"%}" style="color: #fff;"></span></a></li>
                         <li><a href=# onclick="search_woman()"><span class="fa fa-female fa-lg" title="{% trans "여성"%}" style="color: #fff;"></span></a></li>
                         <li><a href=# onclick="search_one()"><span class="fa fa-user fa-lg" title="{% trans "혼자"%}" style="color: #fff;"></span></a></li>
+                        <li><a href=# onclick="search_couple()"><span class="fa fa-heart fa-lg" title="{% trans "커플"%}" style="color: #fff;"></span></a></li>
+                        <!--커플 아이콘이 없어 하트로 대체하였습니다!!-->
                         <li><a href="#" onclick="search_many()"><span class="fa fa-users fa-lg" title="{% trans "다수" %}" style="color: #fff;"></span></a></li>
                         <li><a href="javascript:;" onclick="download_files();"><span class="fa fa-download fa-lg"
                                                                                      title="{% trans "Download Selected File" %}" style="color: #fff;">다운로드</span></a>
@@ -477,8 +479,7 @@
     function search_man() {
         var main_folder = $('#location').attr("data-location");
         var default_name = "jpg";
-        ////아래 이름바꾸는 부분////
-        var file_name = ["m"];
+        var file_name = ["m"];///원하시는 이름으로 바꾸시면 됩니다!
         $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
         $('#location').attr("data-location", main_folder);
         $(".pb-filemng-template-body").empty();
@@ -514,8 +515,7 @@
     function search_woman() {
         var default_name = "jpg";
         var main_folder = $('#location').attr("data-location");
-        ////아래가 이름바꾸는 부분////
-        var file_name = ["w"];
+        var file_name = ["w"];///원하시는 이름으로 바꾸시면 됩니다!
         $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
         $('#location').attr("data-location", main_folder);
         $(".pb-filemng-template-body").empty();
@@ -550,8 +550,7 @@
     function search_one() {
         var main_folder = $('#location').attr("data-location");
         var default_name = "jpg";
-        ////이름바꾸는 부분////
-        var file_name = ["0"];
+        var file_name = ["0"];///원하시는 이름으로 바꾸시면 됩니다!
         $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
         $('#location').attr("data-location", main_folder);
         $(".pb-filemng-template-body").empty();
@@ -583,10 +582,46 @@
             });
 
     }
+    function search_couple(){
+        var main_folder = $('#location').attr("data-location");
+        var default_name = "jpg";
+        var file_name = ["c"];///원하시는 이름으로 바꾸시면 됩니다!
+        $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
+        $('#location').attr("data-location", main_folder);
+        $(".pb-filemng-template-body").empty();
+        var get_files_url = "{% url 'get_folder_items' "arg1djs3server" "sort_a_z" %}".replace(/arg1djs3server/, main_folder.toString()).replace(/sort_a_z/, sort_a_z_value);
+        $.getJSON(
+            get_files_url, function (files_list) {
+                for (var key in files_list) {
+                    if (files_list[key].text.indexOf(default_name) === -1 &&files_list[key].text.indexOf("png") === -1) continue;
+                    if (files_list[key].text.indexOf(file_name) === -1) continue;
+
+                    target = "";
+                    if ('folder' != files_list[key].type) {
+                        target = 'target="_blank"';
+                    }
+                    $(".pb-filemng-template-body").append(
+                        '<div class="col-sm-2 pb-filemng-body-folders" onClick="select_file(this);" ondblclick="open_item(this);" ' +
+                        'data-toggle="tooltip" ondrop="drop_file(event)" ondragover="allowDrop_file(event)" ondragstart="dragstart_file(event)" ondragend="dragend_file(event)" draggable="true" title="' + files_list[key].text +
+                        '" data-url="' + files_list[key].url + '" data-type="' + files_list[key].type + '">' +
+                        '<img src="' + files_list[key].icon + '"/></a>' + '<br />' +
+                        '<p class="pb-filemng-paragraphs" >' + files_list[key].text + '</p>' +
+                        '<span class="fa check-file"></span>' +
+                        '<span class="hide location-info">' + main_folder + files_list[key].text + '</span>' +
+                        '</div>'
+                    );
+                }
+                if (1 > files_list.length) {
+                    $(".pb-filemng-template-body").append('<p style="text-align:center">{% trans "Folder is Empty" %}</p>');
+                }
+            });
+
+    }
+
     function search_many() {
         var main_folder = $('#location').attr("data-location");
         var default_name = "jpg";
-        var file_name = ["1"];
+        var file_name = ["1"];///원하시는 이름으로 바꾸시면 됩니다!
         $('#top_folder').attr("data-top_folder", $('#location').attr("data-location"));
         $('#location').attr("data-location", main_folder);
         $(".pb-filemng-template-body").empty();
@@ -666,21 +701,6 @@
             },
         });
     }
-    
-    /*function find_img(file){
-        loc = $('#location').attr("data-location");
-        data = file
-        $.ajax({
-            url: '{% url "find_file" %}',
-            type: 'POST',
-            dataType: 'json',
-            data: data,
-            success: function (resultData) {
-                get_files(loc);
-                console.log(resultData);
-            },
-        });
-    }*/
 
 
     function move_selected_file(d) {
