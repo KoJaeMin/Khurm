@@ -99,14 +99,18 @@ modifyButton.on("click",function(e) {
 var withdrawButton = $("#withdrawal");
 
 withdrawButton.on("click",function(e) {
+    var header=sessionStorage["token"];
     $.ajax({
-        type:'POST',
+        type:'DELETE',
         enctype:'multipart/form-data',
-        url:'/delete',
+        url:'/user/delete/',
         processData:false,
         contentType:false,
         cache:false,
         timeout:600000,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization","JWT " + header);
+        },
         success:function(data) {
             alert("삭제 완료");
             console.log(data);
